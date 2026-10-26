@@ -122,7 +122,7 @@ input[type=number] { width: 90px; }
 .prov { border: 1px solid var(--border); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
 .prov .chk { flex-direction: row; align-items: center; color: var(--ink); font-size: 14px; font-weight: 600; }
 .progress { height: 8px; background: var(--grid); border-radius: 4px; overflow: hidden; margin-top: 8px; }
-.progress .bar { height: 100%; width: 0; background: var(--focus); transition: width .2s; }
+.progress .bar { height: 100%; width: 0; background: var(--focus); }
 
 .banner { background: var(--warn-bg); border: 1px solid var(--border); border-radius: 10px; padding: 10px 14px; margin-bottom: 16px; }
 .banner.error { background: var(--err-bg); }

@@ -1,0 +1,225 @@
+
+## Bersih: 2026-10-26T00:44:17Z
+## Sistem: Linux 6.18.44-fc-v153 x86_64, Python 3.13.17
+## Commit: 878b6e1c94613dab8428c290758e24758ef5a361
+## Folder kerja: /tmp/tmp.XjAoOJ6Cmt
+## Isi checkout bersih:
+total 144
+drwxr-xr-x 7 root root  4096 Oct 26 00:44 .
+drwx------ 3 root root  4096 Oct 26 00:44 ..
+-rw-rw-r-- 1 root root   211 Oct 26 00:44 .env.example
+drwxrwxr-x 3 root root  4096 Oct 26 00:44 .github
+-rw-rw-r-- 1 root root   120 Oct 26 00:44 .gitignore
+drwxrwxr-x 2 root root  4096 Oct 26 00:44 .streamlit
+-rw-rw-r-- 1 root root 11830 Oct 26 00:44 README.md
+-rw-rw-r-- 1 root root  1239 Oct 26 00:44 dashboard_launcher.py
+drwxrwxr-x 3 root root  4096 Oct 26 00:44 docs
+-rw-rw-r-- 1 root root 71424 Oct 26 00:44 gem_visibility_auditor.py
+-rw-rw-r-- 1 root root   109 Oct 26 00:44 requirements-dev.txt
+-rw-rw-r-- 1 root root   158 Oct 26 00:44 requirements.txt
+drwxrwxr-x 2 root root  4096 Oct 26 00:44 scripts
+-rw-rw-r-- 1 root root 11948 Oct 26 00:44 streamlit_app.py
+drwxrwxr-x 2 root root  4096 Oct 26 00:44 tests
+
+## [1/4] virtualenv baru + pip install -r requirements-dev.txt
+ipykernel==7.4.0
+matplotlib==3.11.2
+nbclient==0.11.0
+pandas==3.1.0
+playwright==1.64.1
+pyinstaller==6.22.3
+pytest==9.1.1
+requests==2.34.2
+streamlit==1.66.1
+
+## [2/4] CLI mode demo
+GEM Visibility Auditor v1.0.0
+Model: demo:simulasi-a, demo:simulasi-b
+Bahasa: id, en | runs: 1 | total permintaan: 60
+MODE DEMO: jawaban disimulasikan secara offline (bukan data nyata).
+Folder hasil: /tmp/tmp.XjAoOJ6Cmt/demo_out
+
+[  1/60] ok  demo:simulasi-a                          Q01-id run1   0.0s
+[  2/60] ok  demo:simulasi-a                          Q01-en run1   0.0s
+[  3/60] ok  demo:simulasi-a                          Q02-id run1   0.0s
+[  4/60] ok  demo:simulasi-a                          Q02-en run1   0.0s
+[  5/60] ok  demo:simulasi-a                          Q04-en run1   0.0s
+[  6/60] ok  demo:simulasi-a                          Q03-id run1   0.0s
+[  7/60] ok  demo:simulasi-a                          Q05-en run1   0.0s
+[  8/60] ok  demo:simulasi-a                          Q03-en run1   0.0s
+[  9/60] ok  demo:simulasi-a                          Q06-en run1   0.0s
+[ 10/60] ok  demo:simulasi-a                          Q07-id run1   0.0s
+[ 11/60] ok  demo:simulasi-a                          Q07-en run1   0.0s
+[ 12/60] ok  demo:simulasi-a                          Q08-id run1   0.0s
+[ 13/60] ok  demo:simulasi-a                          Q04-id run1   0.0s
+[ 14/60] ok  demo:simulasi-a                          Q09-id run1   0.0s
+[ 15/60] ok  demo:simulasi-a                          Q05-id run1   0.0s
+[ 16/60] ok  demo:simulasi-a                          Q10-id run1   0.0s
+[ 17/60] ok  demo:simulasi-a                          Q06-id run1   0.0s
+[ 18/60] ok  demo:simulasi-a                          Q11-id run1   0.0s
+[ 19/60] ok  demo:simulasi-a                          Q08-en run1   0.0s
+[ 20/60] ok  demo:simulasi-a                          Q12-id run1   0.0s
+[ 21/60] ok  demo:simulasi-a                          Q09-en run1   0.0s
+[ 22/60] ok  demo:simulasi-a                          Q13-id run1   0.0s
+[ 23/60] ok  demo:simulasi-a                          Q10-en run1   0.0s
+[ 24/60] ok  demo:simulasi-a                          Q14-id run1   0.0s
+[ 25/60] ok  demo:simulasi-a                          Q14-en run1   0.0s
+[ 26/60] ok  demo:simulasi-a                          Q15-id run1   0.0s
+[ 27/60] ok  demo:simulasi-a                          Q15-en run1   0.0s
+[ 28/60] ok  demo:simulasi-a                          Q11-en run1   0.0s
+[ 29/60] ok  demo:simulasi-b                          Q01-en run1   0.0s
+[ 30/60] ok  demo:simulasi-a                          Q12-en run1   0.0s
+[ 31/60] ok  demo:simulasi-b                          Q02-en run1   0.0s
+[ 32/60] ok  demo:simulasi-a                          Q13-en run1   0.0s
+[ 33/60] ok  demo:simulasi-b                          Q03-en run1   0.0s
+[ 34/60] ok  demo:simulasi-b                          Q04-id run1   0.0s
+[ 35/60] ok  demo:simulasi-b                          Q04-en run1   0.0s
+[ 36/60] ok  demo:simulasi-b                          Q05-id run1   0.0s
+[ 37/60] ok  demo:simulasi-b                          Q01-id run1   0.0s
+[ 38/60] ok  demo:simulasi-b                          Q06-id run1   0.0s
+[ 39/60] ok  demo:simulasi-b                          Q02-id run1   0.0s
+[ 40/60] ok  demo:simulasi-b                          Q07-id run1   0.0s
+[ 41/60] ok  demo:simulasi-b                          Q03-id run1   0.0s
+[ 42/60] ok  demo:simulasi-b                          Q08-id run1   0.0s
+[ 43/60] ok  demo:simulasi-b                          Q08-en run1   0.0s
+[ 44/60] ok  demo:simulasi-b                          Q09-id run1   0.0s
+[ 45/60] ok  demo:simulasi-b                          Q09-en run1   0.0s
+[ 46/60] ok  demo:simulasi-b                          Q05-en run1   0.0s
+[ 47/60] ok  demo:simulasi-b                          Q10-en run1   0.0s
+[ 48/60] ok  demo:simulasi-b                          Q06-en run1   0.0s
+[ 49/60] ok  demo:simulasi-b                          Q11-en run1   0.0s
+[ 50/60] ok  demo:simulasi-b                          Q07-en run1   0.0s
+[ 51/60] ok  demo:simulasi-b                          Q12-en run1   0.0s
+[ 52/60] ok  demo:simulasi-b                          Q13-id run1   0.0s
+[ 53/60] ok  demo:simulasi-b                          Q13-en run1   0.0s
+[ 54/60] ok  demo:simulasi-b                          Q14-id run1   0.0s
+[ 55/60] ok  demo:simulasi-b                          Q10-id run1   0.0s
+[ 56/60] ok  demo:simulasi-b                          Q15-id run1   0.0s
+[ 57/60] ok  demo:simulasi-b                          Q11-id run1   0.0s
+[ 58/60] ok  demo:simulasi-b                          Q14-en run1   0.0s
+[ 59/60] ok  demo:simulasi-b                          Q12-id run1   0.0s
+[ 60/60] ok  demo:simulasi-b                          Q15-en run1   0.0s
+
+==============================================================================
+ #  Destinasi                  Sebutan    SOV %  Mention %  Urutan
+------------------------------------------------------------------------------
+ 1+ Bali                            65     16.9       83.3    1.66
+ 2  Yogyakarta & Borobudur          56     14.6       68.3    2.66
+ 3+ Labuan Bajo                     51     13.2       66.7    2.78
+ 4  Raja Ampat                      49     12.7       61.7    3.00
+ 5  Lombok & Mandalika              42     10.9       51.7    3.52
+ 6  Bromo Tengger Semeru            31      8.1       38.3    3.39
+ 7* Danau Toba                      29      7.5       33.3    3.75
+ 8  Likupang & Bunaken              19      4.9       23.3    4.29
+ 9  Belitung                        18      4.7       23.3    4.29
+10  Wakatobi                        15      3.9       18.3    3.73
+11  Kelimutu                        10      2.6       11.7    5.14
+------------------------------------------------------------------------------
+* fokus, + kompetitor utama
+Danau Toba: share of AI voice 7.5% (peringkat 7 dari 11), disebut di 33.3% jawaban.
+  vs Bali: 16.9% SOV. Setiap 100 sebutan Bali, Danau Toba disebut 44.6 kali.
+  vs Labuan Bajo: 13.2% SOV. Setiap 100 sebutan Labuan Bajo, Danau Toba disebut 56.8 kali.
+CATATAN: ada data SIMULASI (mode demo), bukan jawaban LLM sungguhan.
+==============================================================================
+
+File hasil di: /tmp/tmp.XjAoOJ6Cmt/demo_out
+  - report.html
+  - responses.csv
+  - summary.csv
+  - share_of_voice.png
+  - dashboard_data.json
+Arsip: /tmp/tmp.XjAoOJ6Cmt/demo_out.zip
+total 1240
+drwxr-xr-x 2 root root   4096 Oct 26 00:44 .
+drwx------ 5 root root   4096 Oct 26 00:44 ..
+-rw-r--r-- 1 root root  61122 Oct 26 00:44 dashboard_data.json
+-rw-r--r-- 1 root root 101812 Oct 26 00:44 mention_rate.png
+-rw-r--r-- 1 root root  75092 Oct 26 00:44 mentions.csv
+-rw-r--r-- 1 root root 589325 Oct 26 00:44 report.html
+-rw-r--r-- 1 root root  34057 Oct 26 00:44 responses.csv
+-rw-r--r-- 1 root root  50888 Oct 26 00:44 responses.jsonl
+-rw-r--r-- 1 root root 114276 Oct 26 00:44 share_of_voice.png
+-rw-r--r-- 1 root root   9913 Oct 26 00:44 sov_by_category.csv
+-rw-r--r-- 1 root root   1427 Oct 26 00:44 sov_by_language.csv
+-rw-r--r-- 1 root root  91564 Oct 26 00:44 sov_by_language.png
+-rw-r--r-- 1 root root   1719 Oct 26 00:44 sov_by_model.csv
+-rw-r--r-- 1 root root 104598 Oct 26 00:44 sov_by_model.png
+-rw-r--r-- 1 root root    711 Oct 26 00:44 summary.csv
+
+## [3/4] pytest lengkap
+============================= test session starts ==============================
+platform linux -- Python 3.13.17, pytest-9.1.1, pluggy-1.7.0 -- /tmp/tmp.XjAoOJ6Cmt/venv/bin/python
+rootdir: /tmp/tmp.XjAoOJ6Cmt/src
+plugins: platformdirs-4.13.5, anyio-4.15.1
+collecting ... collected 44 items
+
+tests/test_cli_e2e.py::test_demo_end_to_end PASSED                       [  2%]
+tests/test_cli_e2e.py::test_real_http_path_through_cli PASSED            [  4%]
+tests/test_cli_e2e.py::test_analyze_only_matches PASSED                  [  6%]
+tests/test_cli_e2e.py::test_resume PASSED                                [  9%]
+tests/test_cli_e2e.py::test_missing_key_exit_code PASSED                 [ 11%]
+tests/test_cli_e2e.py::test_all_requests_failed_exit_code PASSED         [ 13%]
+tests/test_cli_e2e.py::test_no_args_non_interactive_falls_back_to_demo PASSED [ 15%]
+tests/test_cli_e2e.py::test_list_questions_and_help PASSED               [ 18%]
+tests/test_cli_e2e.py::test_docs_config_in_sync PASSED                   [ 20%]
+tests/test_cli_e2e.py::test_docs_demo_data_in_sync PASSED                [ 22%]
+tests/test_core.py::test_alias_counting_longest_first PASSED             [ 25%]
+tests/test_core.py::test_word_boundaries_and_case PASSED                 [ 27%]
+tests/test_core.py::test_hyphen_and_whitespace_variants PASSED           [ 29%]
+tests/test_core.py::test_no_partial_word_match PASSED                    [ 31%]
+tests/test_core.py::test_first_position PASSED                           [ 34%]
+tests/test_core.py::test_find_spans_for_highlight PASSED                 [ 36%]
+tests/test_core.py::test_analyze_share_of_voice PASSED                   [ 38%]
+tests/test_core.py::test_analyze_all_errors PASSED                       [ 40%]
+tests/test_core.py::test_parse_model_specs PASSED                        [ 43%]
+tests/test_core.py::test_build_tasks_counts PASSED                       [ 45%]
+tests/test_core.py::test_config_override PASSED                          [ 47%]
+tests/test_core.py::test_csv_roundtrip PASSED                            [ 50%]
+tests/test_core.py::test_dotenv_loading PASSED                           [ 52%]
+tests/test_core.py::test_no_em_dash_in_sources PASSED                    [ 54%]
+tests/test_exe.py::test_exe_demo_run SKIPPED (set GEM_EXE_PATH untuk...) [ 56%]
+tests/test_exe.py::test_exe_version_and_questions SKIPPED (set GEM_E...) [ 59%]
+tests/test_notebook_colab.py::test_whole_file_in_one_cell PASSED         [ 61%]
+tests/test_providers.py::test_anthropic_request_shape PASSED             [ 63%]
+tests/test_providers.py::test_anthropic_older_model_has_no_effort_or_fallback PASSED [ 65%]
+tests/test_providers.py::test_anthropic_retries_without_fallbacks_on_400 PASSED [ 68%]
+tests/test_providers.py::test_anthropic_refusal_is_error PASSED          [ 70%]
+tests/test_providers.py::test_retry_on_429 PASSED                        [ 72%]
+tests/test_providers.py::test_401_not_retried_and_message_kept PASSED    [ 75%]
+tests/test_providers.py::test_gemini_request_and_thought_parts_skipped PASSED [ 77%]
+tests/test_providers.py::test_openai_and_compat_token_param PASSED       [ 79%]
+tests/test_providers.py::test_run_audit_mixed_providers PASSED           [ 81%]
+tests/test_streamlit_app.py::test_demo_view_renders PASSED               [ 84%]
+tests/test_streamlit_app.py::test_run_new_audit_demo_provider PASSED     [ 86%]
+tests/test_streamlit_app.py::test_missing_key_disables_run PASSED        [ 88%]
+tests/test_web_dashboard.py::test_sample_loads_and_matches_python PASSED [ 90%]
+tests/test_web_dashboard.py::test_matcher_parity_with_python PASSED      [ 93%]
+tests/test_web_dashboard.py::test_upload_csv_from_cli_matches_python PASSED [ 95%]
+tests/test_web_dashboard.py::test_run_in_browser_with_mocked_apis PASSED [ 97%]
+tests/test_web_dashboard.py::test_mobile_layout_no_horizontal_scroll PASSED [100%]
+
+======================== 42 passed, 2 skipped in 45.45s ========================
+
+## [3b/4] server Streamlit sungguhan (streamlit run) + screenshot
+health: ok
+Streamlit dirender, metrik: ['SOV Danau Toba', 'SOV Bali', 'SOV Labuan Bajo', 'Peringkat Danau Toba'] exceptions: 0
+
+## [4/4] build .exe PyInstaller (venv terpisah, dependensi inti saja)
+51197 INFO: Building EXE from EXE-00.toc completed successfully.
+51204 INFO: Build complete! The results are available in: /tmp/tmp.XjAoOJ6Cmt/src/dist
+total 58688
+drwxr-xr-x  2 root root     4096 Oct 26 00:46 .
+drwxr-xr-x 10 root root     4096 Oct 26 00:46 ..
+-rwxr-xr-x  1 root root 60085136 Oct 26 00:46 GEM-Visibility-Auditor
+gem_visibility_auditor 1.0.0
+============================= test session starts ==============================
+platform linux -- Python 3.13.17, pytest-9.1.1, pluggy-1.7.0 -- /tmp/tmp.XjAoOJ6Cmt/venv-exe/bin/python
+rootdir: /tmp/tmp.XjAoOJ6Cmt/src
+collecting ... collected 2 items
+
+tests/test_exe.py::test_exe_demo_run PASSED                              [ 50%]
+tests/test_exe.py::test_exe_version_and_questions PASSED                 [100%]
+
+============================== 2 passed in 4.56s ===============================
+
+## SEMUA LANGKAH LULUS

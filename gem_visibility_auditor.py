@@ -1212,6 +1212,11 @@ def zip_outputs(out_dir: Path) -> Path:
 
 def print_summary(results: dict) -> None:
     s = results["summary"]
+    h = results["headline"]
+    if not h["responses_ok"]:
+        log(f"\nTidak ada jawaban yang berhasil ({h['responses_error']} permintaan gagal). "
+            "Lihat kolom 'error' di responses.csv.")
+        return
     log("")
     log("=" * 78)
     log(f"{'#':>2}  {'Destinasi':<26}{'Sebutan':>8}{'SOV %':>9}{'Mention %':>11}{'Urutan':>8}")
