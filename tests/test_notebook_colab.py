@@ -35,3 +35,27 @@ def test_whole_file_in_one_cell(root, tmp_path):
     images = [o for o in nb.cells[0].outputs if "image/png" in o.get("data", {})]
     assert len(images) == 4, "keempat grafik harus tampil inline"
     assert "FILES" in "".join(o.get("text", "") for o in nb.cells[1].outputs)
+
+
+def test_colab_notebook_in_sync(root):
+    """GEM_Visibility_Auditor_Colab.ipynb harus identik dengan gem_visibility_auditor.py."""
+    nb = nbformat.read(str(root / "GEM_Visibility_Auditor_Colab.ipynb"), as_version=4)
+    code = [c for c in nb.cells if c.cell_type == "code"]
+    assert len(code) == 1, "notebook harus berisi tepat satu sel kode"
+    assert code[0].source == (root / "gem_visibility_auditor.py").read_text(encoding="utf-8"), \
+        "jalankan: python scripts/build_colab_notebook.py"
+
+
+def test_colab_notebook_executes(root, tmp_path):
+    """Jalankan notebook yang di-commit apa adanya (seperti tombol Open in Colab lalu Run all)."""
+    nb = nbformat.read(str(root / "GEM_Visibility_Auditor_Colab.ipynb"), as_version=4)
+    os.environ["GEM_NONINTERACTIVE"] = "1"
+    try:
+        nbclient.NotebookClient(nb, timeout=300, kernel_name="python3",
+                                resources={"metadata": {"path": str(tmp_path)}}).execute()
+    finally:
+        os.environ.pop("GEM_NONINTERACTIVE", None)
+    code = [c for c in nb.cells if c.cell_type == "code"][0]
+    assert not [o for o in code.outputs if o.get("output_type") == "error"]
+    assert len([o for o in code.outputs if "image/png" in o.get("data", {})]) == 4
+    assert list(tmp_path.glob("gem_audit_output/audit_*.zip"))

@@ -9,7 +9,7 @@ disebut dibanding Bali, Labuan Bajo**, dan 8 destinasi lain. Hasilnya: CSV, graf
 | Cara pakai | Perintah / tautan |
 |---|---|
 | Dashboard web (GitHub Pages) | https://samuelhtampubolon.github.io/GEM-Visibility-Auditor/ |
-| Google Colab | salin seluruh isi `gem_visibility_auditor.py` ke **satu sel**, jalankan |
+| Google Colab | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/samuelhtampubolon/GEM-Visibility-Auditor/blob/ccr-1395cab8-cb01f2/GEM_Visibility_Auditor_Colab.ipynb) atau salin seluruh isi `gem_visibility_auditor.py` ke **satu sel** |
 | Windows .exe | unduh dari [Releases](https://github.com/samuelhtampubolon/GEM-Visibility-Auditor/releases/latest), klik dua kali |
 | Python lokal | `python gem_visibility_auditor.py --models anthropic gemini openai` |
 | Dashboard Streamlit | `streamlit run streamlit_app.py` (atau deploy ke Streamlit Community Cloud) |
@@ -17,6 +17,9 @@ disebut dibanding Bali, Labuan Bajo**, dan 8 destinasi lain. Hasilnya: CSV, graf
 ---
 
 ## 1. Google Colab (copy-paste satu sel)
+
+**Cara tercepat:** klik [Open in Colab](https://colab.research.google.com/github/samuelhtampubolon/GEM-Visibility-Auditor/blob/ccr-1395cab8-cb01f2/GEM_Visibility_Auditor_Colab.ipynb) lalu *Runtime > Run all*. Notebook itu berisi satu sel
+yang identik dengan `gem_visibility_auditor.py` (diuji otomatis). Cara manual:
 
 1. Buka https://colab.research.google.com, buat notebook baru.
 2. (Opsional) Klik ikon kunci (**Secrets**) di panel kiri, tambahkan `ANTHROPIC_API_KEY`, `GEMINI_API_KEY`,
@@ -171,7 +174,7 @@ Setiap audit membuat folder `gem_audit_output/audit_<waktu>/`:
 ```bash
 pip install -r requirements-dev.txt
 python -m playwright install chromium
-python -m pytest -v                    # 44 tes
+python -m pytest -v                    # 46 tes
 bash scripts/clean_env_test.sh         # uji di lingkungan bersih + build .exe
 ```
 
@@ -181,7 +184,8 @@ Yang diuji end-to-end:
   (`:generateContent`) dan OpenAI (`/chat/completions`): header (`x-api-key`, `anthropic-version`, `x-goog-api-key`,
   `Bearer`), body, retry 429, error 401, refusal, fallback, part "thought" Gemini diabaikan.
 * **CLI** sebagai proses terpisah: 90 permintaan ke 3 provider, mode demo, `--analyze`, `--resume`, kode keluar.
-* **Google Colab**: seluruh isi file dijalankan dalam **satu sel** notebook Jupyter (nbclient), grafik tampil inline.
+* **Google Colab**: seluruh isi file dijalankan dalam **satu sel** notebook Jupyter (nbclient), grafik tampil inline;
+  notebook `GEM_Visibility_Auditor_Colab.ipynb` dicek identik dengan file .py dan ikut dijalankan.
 * **Streamlit**: AppTest untuk demo, audit baru, validasi kunci; plus server `streamlit run` sungguhan + screenshot.
 * **Dashboard web**: Chromium (Playwright): muat contoh, unggah CSV, audit di browser dengan API yang di-mock,
   kesamaan angka dengan Python, tata letak ponsel tanpa scroll horizontal.
@@ -206,6 +210,8 @@ dashboard_launcher.py       # peluncur dashboard untuk build .exe
 docs/                       # dashboard web GitHub Pages (index.html, app.js, style.css, data/)
 tests/                      # pytest end-to-end + server API tiruan
 scripts/clean_env_test.sh   # uji lingkungan bersih
+scripts/build_colab_notebook.py  # bangun ulang notebook Colab dari file .py
+GEM_Visibility_Auditor_Colab.ipynb  # notebook Colab satu sel (Open in Colab)
 evidence/                   # log dan screenshot bukti eksekusi
 .github/workflows/          # CI tes, build .exe + Release, deploy Pages
 ```

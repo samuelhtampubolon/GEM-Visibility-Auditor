@@ -4,7 +4,7 @@ Semua file di folder ini dihasilkan oleh program dan tes, bukan dibuat manual.
 
 | File | Asal |
 |---|---|
-| `clean_env_test_log.txt` | `bash scripts/clean_env_test.sh`: checkout bersih dari commit (git archive), virtualenv baru, `pip install -r requirements-dev.txt`, CLI demo, 44 tes pytest, server `streamlit run` sungguhan, build PyInstaller `--onefile` dan smoke test biner |
+| `clean_env_test_log.txt` | `bash scripts/clean_env_test.sh`: checkout bersih dari commit (git archive), virtualenv baru, `pip install -r requirements-dev.txt`, CLI demo, 46 tes pytest, server `streamlit run` sungguhan, build PyInstaller `--onefile` dan smoke test biner |
 | `live_endpoint_check.txt` | CLI memanggil endpoint asli `api.anthropic.com` dan `generativelanguage.googleapis.com` dengan kunci sengaja tidak valid; kedua server menjawab 401/400 dan pesannya terbaca, membuktikan URL, header, dan penanganan error |
 | `web_dashboard_desktop.png` | Playwright + Chromium, dashboard GitHub Pages memuat contoh demo |
 | `web_dashboard_run_in_browser.png` | audit langsung dari browser (Claude + Gemini, respons API di-mock) |
