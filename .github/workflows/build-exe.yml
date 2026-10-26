@@ -16,8 +16,8 @@ jobs:
       run:
         shell: bash
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
       - name: Read version
@@ -31,7 +31,7 @@ jobs:
           pyinstaller --onefile --name GEM-Visibility-Auditor gem_visibility_auditor.py
       - name: Smoke test CLI exe
         env:
-          GEM_EXE_PATH: dist/GEM-Visibility-Auditor.exe
+          GEM_EXE_PATH: ${{ github.workspace }}/dist/GEM-Visibility-Auditor.exe
           PYTHONIOENCODING: utf-8
         run: |
           ./dist/GEM-Visibility-Auditor.exe --version

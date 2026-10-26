@@ -22,10 +22,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/configure-pages@v5
+      - uses: actions/checkout@v5
+      - id: configure
+        uses: actions/configure-pages@v5
         with:
           enablement: true
+      - name: Petunjuk bila Pages belum aktif
+        if: failure() && steps.configure.outcome == 'failure'
+        run: |
+          echo "::error::GitHub Pages belum aktif. Buka Settings > Pages, pilih Source: GitHub Actions, lalu jalankan ulang workflow ini."
       - uses: actions/upload-pages-artifact@v3
         with:
           path: docs

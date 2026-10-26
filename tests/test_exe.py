@@ -6,7 +6,8 @@ import subprocess
 import pandas as pd
 import pytest
 
-EXE = os.environ.get("GEM_EXE_PATH")
+# Path absolut dihitung saat impor, sebelum fixture conftest pindah ke folder tmp.
+EXE = os.path.abspath(os.environ["GEM_EXE_PATH"]) if os.environ.get("GEM_EXE_PATH") else None
 pytestmark = pytest.mark.skipif(not EXE, reason="set GEM_EXE_PATH untuk menguji .exe")
 
 
