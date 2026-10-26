@@ -1,0 +1,245 @@
+{
+  "focus": "danau_toba",
+  "competitors": [
+    "bali",
+    "labuan_bajo"
+  ],
+  "destinations": [
+    {
+      "id": "danau_toba",
+      "name": "Danau Toba",
+      "aliases": [
+        "danau toba",
+        "lake toba",
+        "toba",
+        "samosir",
+        "parapat",
+        "balige"
+      ]
+    },
+    {
+      "id": "bali",
+      "name": "Bali",
+      "aliases": [
+        "bali",
+        "balinese",
+        "ubud",
+        "seminyak",
+        "canggu",
+        "nusa dua",
+        "nusa penida",
+        "uluwatu",
+        "kintamani",
+        "sanur",
+        "jimbaran"
+      ]
+    },
+    {
+      "id": "labuan_bajo",
+      "name": "Labuan Bajo",
+      "aliases": [
+        "labuan bajo",
+        "komodo",
+        "pulau padar",
+        "padar island"
+      ]
+    },
+    {
+      "id": "raja_ampat",
+      "name": "Raja Ampat",
+      "aliases": [
+        "raja ampat",
+        "waisai",
+        "wayag",
+        "piaynemo"
+      ]
+    },
+    {
+      "id": "yogyakarta",
+      "name": "Yogyakarta & Borobudur",
+      "aliases": [
+        "yogyakarta",
+        "jogjakarta",
+        "jogja",
+        "yogya",
+        "borobudur",
+        "prambanan"
+      ]
+    },
+    {
+      "id": "lombok",
+      "name": "Lombok & Mandalika",
+      "aliases": [
+        "lombok",
+        "mandalika",
+        "gili trawangan",
+        "gili air",
+        "gili meno",
+        "gili islands",
+        "kepulauan gili",
+        "rinjani"
+      ]
+    },
+    {
+      "id": "bromo",
+      "name": "Bromo Tengger Semeru",
+      "aliases": [
+        "bromo",
+        "tengger",
+        "semeru"
+      ]
+    },
+    {
+      "id": "likupang",
+      "name": "Likupang & Bunaken",
+      "aliases": [
+        "likupang",
+        "bunaken",
+        "manado"
+      ]
+    },
+    {
+      "id": "wakatobi",
+      "name": "Wakatobi",
+      "aliases": [
+        "wakatobi"
+      ]
+    },
+    {
+      "id": "belitung",
+      "name": "Belitung",
+      "aliases": [
+        "belitung"
+      ]
+    },
+    {
+      "id": "kelimutu",
+      "name": "Kelimutu",
+      "aliases": [
+        "kelimutu"
+      ]
+    }
+  ],
+  "questions": [
+    {
+      "qid": "Q01",
+      "category": "Umum",
+      "text": {
+        "id": "Apa saja 5 destinasi wisata terbaik di Indonesia yang wajib dikunjungi?",
+        "en": "What are the top 5 must-visit travel destinations in Indonesia?"
+      }
+    },
+    {
+      "qid": "Q02",
+      "category": "Itinerary",
+      "text": {
+        "id": "Saya punya waktu 7 hari untuk liburan di Indonesia. Destinasi mana yang sebaiknya saya kunjungi?",
+        "en": "I have 7 days for a holiday in Indonesia. Which destinations should I visit?"
+      }
+    },
+    {
+      "qid": "Q03",
+      "category": "Bulan madu",
+      "text": {
+        "id": "Rekomendasikan destinasi bulan madu paling romantis di Indonesia.",
+        "en": "Recommend the most romantic honeymoon destinations in Indonesia."
+      }
+    },
+    {
+      "qid": "Q04",
+      "category": "Keluarga",
+      "text": {
+        "id": "Destinasi wisata di Indonesia apa yang cocok untuk liburan keluarga dengan anak-anak?",
+        "en": "Which Indonesian destinations are best for a family holiday with kids?"
+      }
+    },
+    {
+      "qid": "Q05",
+      "category": "Hemat",
+      "text": {
+        "id": "Di mana tempat liburan yang murah tapi indah di Indonesia untuk backpacker?",
+        "en": "Where can backpackers find affordable yet beautiful places to travel in Indonesia?"
+      }
+    },
+    {
+      "qid": "Q06",
+      "category": "Alam",
+      "text": {
+        "id": "Destinasi wisata alam dengan pemandangan paling spektakuler di Indonesia apa saja?",
+        "en": "Which nature destinations in Indonesia have the most spectacular scenery?"
+      }
+    },
+    {
+      "qid": "Q07",
+      "category": "Budaya",
+      "text": {
+        "id": "Di mana saya bisa merasakan budaya dan tradisi lokal yang autentik di Indonesia?",
+        "en": "Where can I experience authentic local culture and traditions in Indonesia?"
+      }
+    },
+    {
+      "qid": "Q08",
+      "category": "Danau",
+      "text": {
+        "id": "Danau terindah di Indonesia yang layak dikunjungi apa saja?",
+        "en": "What are the most beautiful lakes to visit in Indonesia?"
+      }
+    },
+    {
+      "qid": "Q09",
+      "category": "Hidden gem",
+      "text": {
+        "id": "Destinasi tersembunyi (hidden gem) di Indonesia yang belum terlalu ramai turis apa saja?",
+        "en": "What are some hidden-gem destinations in Indonesia that are not yet crowded with tourists?"
+      }
+    },
+    {
+      "qid": "Q10",
+      "category": "Bahari",
+      "text": {
+        "id": "Di mana tempat terbaik untuk menyelam dan snorkeling di Indonesia?",
+        "en": "Where are the best places for diving and snorkeling in Indonesia?"
+      }
+    },
+    {
+      "qid": "Q11",
+      "category": "Petualangan",
+      "text": {
+        "id": "Destinasi petualangan terbaik di Indonesia untuk mendaki gunung atau trekking apa saja?",
+        "en": "What are the best adventure destinations in Indonesia for hiking or trekking?"
+      }
+    },
+    {
+      "qid": "Q12",
+      "category": "Ekowisata",
+      "text": {
+        "id": "Rekomendasikan destinasi ekowisata dan wisata berkelanjutan di Indonesia.",
+        "en": "Recommend eco-tourism and sustainable travel destinations in Indonesia."
+      }
+    },
+    {
+      "qid": "Q13",
+      "category": "Kuliner",
+      "text": {
+        "id": "Destinasi wisata kuliner terbaik di Indonesia di mana saja?",
+        "en": "Which Indonesian destinations are best for food and culinary travel?"
+      }
+    },
+    {
+      "qid": "Q14",
+      "category": "Tinggal lama",
+      "text": {
+        "id": "Di mana tempat terbaik di Indonesia untuk tinggal lama atau bekerja jarak jauh sebagai digital nomad?",
+        "en": "Where are the best places in Indonesia for a long stay or for digital nomads?"
+      }
+    },
+    {
+      "qid": "Q15",
+      "category": "Tren",
+      "text": {
+        "id": "Destinasi wisata Indonesia apa yang sedang naik daun dan layak dikunjungi tahun ini?",
+        "en": "Which Indonesian travel destinations are trending and worth visiting this year?"
+      }
+    }
+  ]
+}

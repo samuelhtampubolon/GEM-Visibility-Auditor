@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GEM Visibility Auditor</title>
+<meta name="description" content="Audit share of AI voice destinasi wisata Indonesia (Danau Toba vs Bali vs Labuan Bajo) di jawaban LLM.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='1' y='9' width='3' height='6' rx='1' fill='%232a78d6'/%3E%3Crect x='6' y='5' width='3' height='10' rx='1' fill='%23eb6834'/%3E%3Crect x='11' y='1' width='3' height='14' rx='1' fill='%23c3c2b7'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brand">
+      <h1>GEM Visibility Auditor</h1>
+      <p class="muted">Share of AI voice destinasi wisata Indonesia di jawaban LLM (Claude, Gemini, ChatGPT, dan lainnya)</p>
+    </div>
+    <nav class="links">
+      <a href="https://github.com/samuelhtampubolon/GEM-Visibility-Auditor">GitHub</a>
+      <a href="https://github.com/samuelhtampubolon/GEM-Visibility-Auditor/releases/latest">Unduh .exe</a>
+      <a href="#cara-pakai">Cara pakai</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="panel" id="source-panel">
+    <div class="seg" role="tablist" aria-label="Sumber data">
+      <button role="tab" class="seg-btn active" data-src="sample" aria-selected="true">Contoh</button>
+      <button role="tab" class="seg-btn" data-src="upload" aria-selected="false">Unggah hasil</button>
+      <button role="tab" class="seg-btn" data-src="run" aria-selected="false">Jalankan di browser</button>
+    </div>
+
+    <div class="src-body" data-body="sample">
+      <p>Menampilkan contoh hasil dari <b>mode demo</b> (data simulasi). Untuk data nyata, unggah hasil skrip Python
+        atau jalankan audit langsung di browser dengan kunci API Anda.</p>
+      <button class="btn" id="load-sample">Muat ulang contoh</button>
+    </div>
+
+    <div class="src-body hidden" data-body="upload">
+      <p>Unggah <code>responses.csv</code> atau <code>dashboard_data.json</code> dari folder hasil skrip
+        <code>gem_visibility_auditor.py</code> (CLI, .exe, atau Google Colab). Semua dihitung di browser Anda.</p>
+      <label class="file"><input type="file" id="file-input" accept=".csv,.json"><span>Pilih file</span></label>
+      <span id="file-name" class="muted"></span>
+    </div>
+
+    <div class="src-body hidden" data-body="run">
+      <p>Pertanyaan dikirim langsung dari browser ke API provider. Kunci hanya disimpan di memori tab ini dan tidak
+        dikirim ke server lain. Biaya API ditanggung akun Anda.</p>
+      <div class="grid-run" id="provider-grid"></div>
+      <div class="row">
+        <label>Bahasa
+          <select id="run-langs"><option value="id,en">Indonesia + Inggris</option><option value="id">Indonesia</option><option value="en">Inggris</option></select>
+        </label>
+        <label>Jumlah topik <input type="number" id="run-maxq" min="1" max="15" value="15"></label>
+        <label>Pengulangan <input type="number" id="run-runs" min="1" max="5" value="1"></label>
+        <button class="btn primary" id="run-btn">Jalankan audit</button>
+        <button class="btn" id="stop-btn" disabled>Hentikan</button>
+      </div>
+      <div class="progress hidden" id="progress"><div class="bar" id="progress-bar"></div></div>
+      <div class="muted small" id="progress-text"></div>
+    </div>
+  </section>
+
+  <div class="banner hidden" id="sim-banner" role="status">
+    Data ini <b>SIMULASI</b> (mode demo), bukan jawaban LLM sungguhan. Gunakan "Unggah hasil" atau
+    "Jalankan di browser" untuk audit nyata.
+  </div>
+  <div class="banner error hidden" id="err-banner" role="alert"></div>
+
+  <section id="results" class="hidden">
+    <p class="muted" id="meta-line"></p>
+    <div class="tiles" id="tiles"></div>
+    <p id="headline" class="headline"></p>
+
+    <div class="card">
+      <div class="card-head"><h2>Share of AI voice</h2>
+        <div class="legend"><span><i class="sw focus"></i>Fokus</span><span><i class="sw competitor"></i>Kompetitor utama</span><span><i class="sw other"></i>Destinasi lain</span></div>
+      </div>
+      <p class="muted small">Persentase dari seluruh sebutan destinasi di semua jawaban.</p>
+      <div class="bars" id="chart-sov"></div>
+    </div>
+
+    <div class="two">
+      <div class="card">
+        <div class="card-head"><h2>Per bahasa pertanyaan</h2>
+          <div class="legend"><span><i class="sw lang-id"></i>Bahasa Indonesia</span><span><i class="sw lang-en"></i>English</span></div>
+        </div>
+        <div class="bars grouped" id="chart-lang"></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><h2>Mention rate</h2></div>
+        <p class="muted small">% jawaban yang menyebut destinasi minimal sekali.</p>
+        <div class="bars" id="chart-rate"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Per model</h2></div>
+      <p class="muted small">Share of AI voice (%) di tiap model. Warna makin gelap = makin besar.</p>
+      <div class="tablewrap"><table class="heat" id="heat-model"></table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Tabel ringkasan</h2>
+        <div class="dl">
+          <button class="btn small" id="dl-responses">responses.csv</button>
+          <button class="btn small" id="dl-summary">summary.csv</button>
+          <button class="btn small" id="dl-json">dashboard_data.json</button>
+        </div>
+      </div>
+      <div class="tablewrap"><table class="data" id="summary-table"></table></div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><h2>Jawaban</h2></div>
+      <div class="row">
+        <label>Model <select id="f-model"></select></label>
+        <label>Bahasa <select id="f-lang"></select></label>
+        <label>Destinasi disebut <select id="f-dest"></select></label>
+      </div>
+      <p class="muted small" id="resp-count"></p>
+      <div id="responses"></div>
+    </div>
+  </section>
+
+  <section class="card" id="cara-pakai">
+    <h2>Cara pakai</h2>
+    <ol class="howto">
+      <li><b>Google Colab:</b> buka <code>gem_visibility_auditor.py</code> di GitHub, salin seluruh isinya ke satu sel
+        Colab, lalu jalankan. Simpan kunci API di Colab Secrets (ANTHROPIC_API_KEY, GEMINI_API_KEY, OPENAI_API_KEY).</li>
+      <li><b>Windows .exe:</b> unduh <code>GEM-Visibility-Auditor.exe</code> dari halaman
+        <a href="https://github.com/samuelhtampubolon/GEM-Visibility-Auditor/releases/latest">Releases</a>, klik dua kali,
+        ikuti wizard. Build sendiri: <code>pyinstaller --onefile --name GEM-Visibility-Auditor gem_visibility_auditor.py</code></li>
+      <li><b>Python lokal:</b> <code>pip install -r requirements.txt</code> lalu
+        <code>python gem_visibility_auditor.py --models anthropic gemini openai</code></li>
+      <li><b>Dashboard Streamlit:</b> <code>streamlit run streamlit_app.py</code> atau deploy ke Streamlit Community Cloud.</li>
+      <li>Hasil (<code>responses.csv</code> / <code>dashboard_data.json</code>) bisa diunggah ke halaman ini.</li>
+    </ol>
+  </section>
+</main>
+<div id="tooltip" class="tooltip hidden" role="tooltip"></div>
+<footer class="wrap muted small">GEM Visibility Auditor. Metode: hitung sebutan alias destinasi (mis. "Lake Toba",
+  "Samosir") di setiap jawaban, share of voice = sebutan destinasi / total sebutan.</footer>
+<script src="app.js"></script>
+</body>
+</html>

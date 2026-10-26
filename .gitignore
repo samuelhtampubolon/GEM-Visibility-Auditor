@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+build/
+dist/
+*.spec
+.venv/
+venv/
+.env
+gem_audit_output/
+*.zip
+.streamlit/secrets.toml
