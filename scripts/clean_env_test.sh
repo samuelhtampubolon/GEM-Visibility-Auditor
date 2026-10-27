@@ -57,7 +57,7 @@ with sync_playwright() as p:
     pg.goto("http://localhost:8597/")
     pg.wait_for_selector("text=Seberapa sering AI merekomendasikan Danau Toba?", timeout=60000)
     pg.screenshot(path=os.path.join(os.environ["EVID"], "streamlit_01_start.png"))
-    pg.get_by_text("Contoh (demo)").click()
+    pg.get_by_test_id("stRadioGroup").get_by_text("Contoh (demo)").click()
     pg.wait_for_selector("text=SOV Danau Toba", timeout=60000)
     pg.wait_for_timeout(2500)
     errs = pg.locator('[data-testid="stException"]').count()
