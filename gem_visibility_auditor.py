@@ -66,7 +66,7 @@ import webbrowser
 import zipfile
 from pathlib import Path
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # ---------------------------------------------------------------------------
 # Pengaturan khusus Google Colab / Jupyter (dipakai saat file ditempel ke sel).
@@ -285,7 +285,31 @@ def load_config(path: str | None = None) -> dict:
     return cfg
 
 
+def _is_str_list(v, max_len: int = 200) -> bool:
+    return isinstance(v, list) and all(isinstance(x, str) and 0 < len(x.strip()) <= max_len for x in v)
+
+
 def validate_config(cfg: dict) -> None:
+    """Validasi ketat: konfigurasi bisa berasal dari file pengguna (tidak tepercaya)."""
+    dests = cfg.get("destinations")
+    if not isinstance(dests, list) or not 1 <= len(dests) <= 60:
+        raise ValueError("destinations harus berupa daftar berisi 1-60 destinasi")
+    for d in dests:
+        if not (isinstance(d, dict) and isinstance(d.get("id"), str) and isinstance(d.get("name"), str)
+                and re.fullmatch(r"[a-z0-9_]{1,40}", d["id"]) and 0 < len(d["name"]) <= 80):
+            raise ValueError(f"destinasi tidak valid: {str(d)[:80]}")
+        if not _is_str_list(d.get("aliases"), 80) or len(d["aliases"]) > 40:
+            raise ValueError(f"alias destinasi '{d['id']}' harus berupa 1-40 teks pendek")
+    qs = cfg.get("questions")
+    if not isinstance(qs, list) or not 1 <= len(qs) <= 200:
+        raise ValueError("questions harus berupa daftar berisi 1-200 pertanyaan")
+    for q in qs:
+        if not (isinstance(q, dict) and isinstance(q.get("qid"), str) and isinstance(q.get("text"), dict)
+                and q["text"] and all(isinstance(k, str) and isinstance(v, str) and 0 < len(v) <= 2000
+                                      for k, v in q["text"].items())):
+            raise ValueError(f"pertanyaan tidak valid: {str(q)[:80]}")
+    if not isinstance(cfg.get("competitors"), list) or not isinstance(cfg.get("focus"), str):
+        raise ValueError("focus harus teks dan competitors harus daftar")
     ids = [d["id"] for d in cfg["destinations"]]
     if len(ids) != len(set(ids)):
         raise ValueError("ID destinasi harus unik")
@@ -402,17 +426,45 @@ def _error_message(resp) -> str:
     return str(data)[:300]
 
 
+SECRET_HEADERS = ("authorization", "x-api-key", "x-goog-api-key")
+_SECRET_PATTERNS = re.compile(r"(sk-ant-[A-Za-z0-9_\-]{8,}|sk-[A-Za-z0-9_\-]{16,}|AIza[0-9A-Za-z_\-]{20,}|"
+                              r"gsk_[A-Za-z0-9]{16,}|Bearer\s+[A-Za-z0-9._\-]{12,})")
+
+
+def redact(text: str, *secrets) -> str:
+    """Hapus kunci API dari teks (pesan error, log) sebelum ditampilkan atau disimpan."""
+    text = str(text or "")
+    for sec in secrets:
+        if sec and len(sec) >= 6:
+            text = text.replace(sec, "[REDACTED]")
+    return _SECRET_PATTERNS.sub("[REDACTED]", text)
+
+
+def check_endpoint(url: str, sends_secret: bool) -> None:
+    """Tolak pengiriman kunci API lewat HTTP tanpa enkripsi (kecuali ke komputer sendiri)."""
+    from urllib.parse import urlparse
+    u = urlparse(url)
+    if u.scheme not in ("https", "http") or not u.hostname:
+        raise ProviderError(f"URL endpoint tidak valid: {url}")
+    if u.scheme == "http" and sends_secret and u.hostname not in ("localhost", "127.0.0.1", "::1"):
+        raise ProviderError(f"menolak mengirim kunci API lewat HTTP tanpa enkripsi ke {u.hostname}; gunakan https://")
+
+
 def http_post_json(url: str, headers: dict, body: dict, timeout: float = 120.0, retries: int = 4) -> dict:
     import requests  # impor di sini agar --help tetap cepat
 
+    check_endpoint(url, any(h.lower() in SECRET_HEADERS for h in headers))
     for attempt in range(retries + 1):
         try:
-            resp = requests.post(url, headers=headers, json=body, timeout=timeout)
+            # allow_redirects=False: header kunci (x-api-key, x-goog-api-key) tidak boleh ikut ke host lain.
+            resp = requests.post(url, headers=headers, json=body, timeout=timeout, allow_redirects=False)
         except requests.RequestException as exc:
             if attempt < retries:
                 time.sleep(min(_retry_base() * (2 ** attempt), 30) + random.random() * 0.2)
                 continue
             raise ProviderError(f"koneksi gagal: {exc.__class__.__name__}: {exc}") from exc
+        if 300 <= resp.status_code < 400:
+            raise ProviderError(f"HTTP {resp.status_code}: redirect ditolak demi keamanan kunci API", resp.status_code)
         if resp.status_code == 200:
             try:
                 return resp.json()
@@ -697,7 +749,7 @@ def run_one(task: dict, key: str | None, opts: dict) -> dict:
         rec.update(response=text, status="ok" if text.strip() else "error",
                    error="" if text.strip() else "jawaban kosong", **meta)
     except Exception as exc:  # satu kegagalan tidak boleh menghentikan audit
-        rec.update(response="", status="error", error=str(exc)[:500],
+        rec.update(response="", status="error", error=redact(exc, key)[:500],
                    stop_reason=None, input_tokens=None, output_tokens=None)
     rec["latency_s"] = round(time.time() - t0, 2)
     return rec
@@ -777,9 +829,48 @@ def records_to_df(records: list):
     return df[RESPONSE_COLUMNS + [c for c in df.columns if c not in RESPONSE_COLUMNS]]
 
 
-def read_responses_csv(path: str):
+_FORMULA_START = ("=", "+", "-", "@", "\t", "\r")
+
+
+def _is_text_col(series) -> bool:
     import pandas as pd
-    df = pd.read_csv(path, encoding="utf-8-sig", keep_default_na=False)
+    return series.dtype == object or pd.api.types.is_string_dtype(series)
+
+
+def csv_safe(df):
+    """Netralkan formula injection: sel teks yang diawali = + - @ diberi awalan apostrof
+    agar Excel/Sheets menampilkannya sebagai teks, bukan menjalankannya (OWASP CSV injection)."""
+    out = df.copy()
+    for col in out.columns:
+        if _is_text_col(out[col]):
+            out[col] = out[col].map(lambda v: "'" + v if isinstance(v, str) and v.startswith(_FORMULA_START) else v)
+    return out
+
+
+def csv_unsafe(df):
+    """Kebalikan csv_safe saat membaca CSV hasil program ini."""
+    for col in df.columns:
+        if _is_text_col(df[col]):
+            df[col] = df[col].map(lambda v: v[1:] if isinstance(v, str) and len(v) > 1 and v[0] == "'"
+                                  and v[1:].startswith(_FORMULA_START) else v)
+    return df
+
+
+def to_csv_bytes(df) -> bytes:
+    return csv_safe(df).to_csv(index=False).encode("utf-8-sig")
+
+
+def read_responses_csv(path):
+    """Baca responses.csv (path atau file-like)."""
+    import pandas as pd
+    df = csv_unsafe(pd.read_csv(path, encoding="utf-8-sig", keep_default_na=False, dtype=str))
+    for col in ("run", "latency_s", "input_tokens", "output_tokens"):
+        if col in df.columns:
+            df[col] = pd.to_numeric(df[col], errors="coerce")
+    if "run" in df.columns:
+        df["run"] = df["run"].fillna(1).astype(int)
+    if "simulated" in df.columns:
+        df["simulated"] = df["simulated"].astype(str).str.lower().isin(["true", "1"])
     if "model_label" not in df.columns or (df["model_label"] == "").all():
         df["model_label"] = df["provider"].astype(str) + ":" + df["model"].astype(str)
     if "response_id" not in df.columns:
@@ -883,6 +974,54 @@ def analyze(df, cfg: dict) -> dict:
         })
     return {"mentions": mentions, "summary": summary, "by_language": by_language,
             "by_model": by_model, "by_category": by_category, "headline": headline}
+
+
+def build_insights(results: dict) -> list:
+    """Insight otomatis untuk tim marketing (dipakai CLI, report.html, Streamlit; dicerminkan di docs/app.js)."""
+    h = results["headline"]
+    if not h["responses_ok"]:
+        return []
+    f, fid = h["focus_name"], h["focus_id"]
+    s = results["summary"]
+    top = s.iloc[0]
+    out = []
+    if top["destination_id"] == fid:
+        out.append(f"{f} adalah destinasi paling dominan di jawaban AI ({h['focus_sov_pct']:.1f}% share of voice).")
+    else:
+        out.append(f"{f} berada di peringkat {h['focus_rank']} dari {h['destinations']} dengan {h['focus_sov_pct']:.1f}% "
+                   f"share of voice; {top['destination']} memimpin dengan {top['share_of_voice_pct']:.1f}%.")
+    for c in h["competitors"]:
+        if c["focus_per_100"] is not None:
+            out.append(f"Setiap 100 sebutan {c['name']}, {f} disebut {c['focus_per_100']:.0f} kali.")
+    frow = s[s["destination_id"] == fid].iloc[0]
+    if frow["responses_mentioned"]:
+        out.append(f"{f} muncul di {h['focus_mention_rate_pct']:.0f}% jawaban; saat disebut, rata-rata di urutan "
+                   f"ke-{frow['avg_first_rank']:.1f} di antara destinasi lain.")
+    else:
+        out.append(f"{f} tidak disebut sama sekali di {h['responses_ok']} jawaban.")
+
+    def focus_by(table, dim):
+        t = table[table["destination_id"] == fid]
+        return [(r[dim], float(r["share_of_voice_pct"])) for _, r in t.iterrows()]
+
+    langs = dict(focus_by(results["by_language"], "language"))
+    if "id" in langs and "en" in langs and abs(langs["id"] - langs["en"]) >= 0.5:
+        hi, lo = ("en", "id") if langs["en"] > langs["id"] else ("id", "en")
+        out.append(f"{f} lebih kuat di pertanyaan {LANG_LABELS[hi]} ({langs[hi]:.1f}%) dibanding "
+                   f"{LANG_LABELS[lo]} ({langs[lo]:.1f}%).")
+    cats = sorted(focus_by(results["by_category"], "category"), key=lambda x: -x[1])
+    if len(cats) >= 2 and cats[0][1] != cats[-1][1]:
+        best, worst = cats[0], cats[-1]
+        zero = [c for c, v in cats if v == 0]
+        out.append(f"Kategori terkuat untuk {f}: {best[0]} ({best[1]:.1f}%); terlemah: {worst[0]} ({worst[1]:.1f}%).")
+        if zero:
+            out.append(f"Peluang konten: {f} tidak muncul di {len(zero)} dari {len(cats)} kategori "
+                       f"({', '.join(zero[:5])}{', ...' if len(zero) > 5 else ''}).")
+    models = sorted(focus_by(results["by_model"], "model_label"), key=lambda x: -x[1])
+    if len(models) >= 2:
+        out.append(f"Model yang paling sering menyebut {f}: {models[0][0]} ({models[0][1]:.1f}%); "
+                   f"paling jarang: {models[-1][0]} ({models[-1][1]:.1f}%).")
+    return out
 
 
 def headline_text(h: dict) -> str:
@@ -1097,6 +1236,8 @@ def build_report_html(results: dict, df, cfg: dict, chart_paths: dict) -> str:
             f"{html.escape(str(r['language']))} | {html.escape(r['prompt'])}</summary>"
             f"<pre>{_highlight_html(r['response'], matchers, cfg)}</pre></details>")
     errors = df[df["status"] != "ok"]
+    insights = "".join(f"<li>{html.escape(t)}</li>" for t in build_insights(results))
+    insight_html = f"<h2>Insight</h2><ul class='insights'>{insights}</ul>" if insights else ""
     err_html = ""
     if len(errors):
         err_rows = "".join(f"<tr><td>{html.escape(r['model_label'])}</td><td>{html.escape(str(r['question_id']))}-"
@@ -1110,6 +1251,8 @@ def build_report_html(results: dict, df, cfg: dict, chart_paths: dict) -> str:
     generated = _dt.datetime.now().strftime("%Y-%m-%d %H:%M")
     return f"""<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
 <title>GEM Visibility Audit</title>
 <style>
 :root{{--bg:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#e1e0d9;
@@ -1134,6 +1277,8 @@ td:nth-child(n+3){{font-variant-numeric:tabular-nums}}
 .sw{{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;background:var(--other)}}
 .sw.focus{{background:var(--focus)}} .sw.competitor{{background:var(--competitor)}}
 tr.focus td{{font-weight:600}}
+.insights{{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 34px;margin:0}}
+.insights li{{margin:4px 0}}
 .tablewrap{{overflow-x:auto}}
 details{{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:8px 12px}}
 summary{{cursor:pointer;font-size:13.5px}} pre{{white-space:pre-wrap;font:13px/1.5 ui-monospace,Consolas,monospace}}
@@ -1150,6 +1295,7 @@ mark.focus{{background:#cde2fb;color:#0b0b0b}} mark.competitor{{background:#fbd9
 disebut di {h['focus_mention_rate_pct']:.1f}% jawaban</div></div>
 {comp_tiles}
 </div>
+{insight_html}
 <h2>Grafik</h2>
 {img_tags}
 <h2>Ringkasan per destinasi</h2>
@@ -1178,7 +1324,7 @@ def export_outputs(df, results: dict, cfg: dict, out_dir: Path, show_charts: boo
     }
     for name, t in tables.items():
         p = out_dir / name
-        t.to_csv(p, index=False, encoding="utf-8-sig")
+        csv_safe(t).to_csv(p, index=False, encoding="utf-8-sig")
         paths[name] = p
     if results["headline"]["responses_ok"]:
         paths.update(save_charts(results, out_dir, show=show_charts))
@@ -1229,6 +1375,12 @@ def print_summary(results: dict) -> None:
     log("-" * 78)
     log("* fokus, + kompetitor utama")
     log(headline_text(results["headline"]))
+    insights = build_insights(results)
+    if insights:
+        log("-" * 78)
+        log("Insight:")
+        for line in insights:
+            log(f"  * {line}")
     if results["headline"]["simulated"]:
         log("CATATAN: ada data SIMULASI (mode demo), bukan jawaban LLM sungguhan.")
     log("=" * 78)
@@ -1385,8 +1537,6 @@ def build_arg_parser() -> argparse.ArgumentParser:
     p.add_argument("--no-claude-fallback", action="store_true", help="matikan server-side fallback Claude")
     p.add_argument("--base-url", action="append", default=[], metavar="PROVIDER=URL",
                    help="ganti endpoint, mis. ollama=http://192.168.1.5:11434/v1")
-    p.add_argument("--key", action="append", default=[], metavar="PROVIDER=KEY",
-                   help="kunci API langsung (lebih aman lewat env/.env)")
     p.add_argument("--resume", metavar="FOLDER", help="lanjutkan audit yang terputus di folder ini")
     p.add_argument("--analyze", metavar="RESPONSES_CSV", help="analisis ulang responses.csv tanpa memanggil API")
     p.add_argument("--list-questions", action="store_true", help="tampilkan daftar pertanyaan lalu keluar")
@@ -1454,7 +1604,7 @@ def main(argv: list | None = None) -> int:
         return 0
 
     wizard = not raw and sys.stdin is not None and sys.stdin.isatty()
-    keys = _kv_list(args.key, "--key")
+    keys: dict = {}  # kunci hanya dari env/.env/Colab Secrets/wizard (getpass), tidak pernah dari argumen CLI
     base_urls = _kv_list(args.base_url, "--base-url")
     log(f"GEM Visibility Auditor v{__version__}")
     try:
@@ -1471,7 +1621,7 @@ def main(argv: list | None = None) -> int:
     missing = [p for p, _ in models if not PROVIDERS[p].get("no_key") and not resolve_key(p, keys)]
     if missing:
         log(f"Kunci API tidak ditemukan untuk: {', '.join(sorted(set(missing)))}. Set environment variable "
-            f"({', '.join(PROVIDERS[m]['env'][0] for m in sorted(set(missing)))}) atau pakai --key.")
+            f"({', '.join(PROVIDERS[m]['env'][0] for m in sorted(set(missing)))}) atau isi file .env.")
         return 2
     runs, langs = args.runs, args.langs
     if wizard:

@@ -43,7 +43,7 @@ def test_demo_end_to_end(root, tmp_path):
 
 def test_real_http_path_through_cli(root, tmp_path, mock_server):
     """Jalur API nyata (requests + parsing) untuk 3 provider, 90 permintaan."""
-    env = {"ANTHROPIC_API_KEY": "sk-ant-test", "GEMINI_API_KEY": "g-test", "OPENAI_API_KEY": "sk-test",
+    env = {"ANTHROPIC_API_KEY": "test-key-anthropic", "GEMINI_API_KEY": "g-test", "OPENAI_API_KEY": "test-key-openai",
            "GEM_ANTHROPIC_BASE_URL": mock_server.base, "GEM_GEMINI_BASE_URL": mock_server.base + "/v1beta",
            "GEM_OPENAI_BASE_URL": mock_server.base + "/v1", "GEM_RETRY_BASE": "0.01"}
     out = tmp_path / "live"
@@ -125,3 +125,9 @@ def test_docs_demo_data_in_sync(root):
     data = json.loads((root / "docs" / "data" / "demo_results.json").read_text(encoding="utf-8"))
     assert [r["response"] for r in recs] == [r["response"] for r in data["responses"]]
     assert data["config"] == cfg
+
+
+def test_key_flag_removed_for_safety(root):
+    """Kunci API tidak boleh diterima lewat argumen (terlihat di riwayat shell dan daftar proses)."""
+    p = run_cli(root, "--models", "anthropic", "--key", "anthropic=test-key")
+    assert p.returncode == 2 and "unrecognized arguments" in p.stderr

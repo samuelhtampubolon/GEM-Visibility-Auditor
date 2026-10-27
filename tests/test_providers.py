@@ -1,5 +1,7 @@
 """Uji pemanggil API lewat HTTP sungguhan ke server tiruan (format wire asli)."""
 
+import json
+
 import pytest
 
 import gem_visibility_auditor as gva
@@ -14,12 +16,12 @@ def opts(srv, **kw):
 
 
 def test_anthropic_request_shape(mock_server):
-    text, meta = gva.call_anthropic("claude-opus-5-5", "Halo?", "sk-test", opts(mock_server))
+    text, meta = gva.call_anthropic("claude-opus-5-5", "Halo?", "test-key-anthropic", opts(mock_server))
     assert "Danau Toba" in text and meta["stop_reason"] == "end_turn" and meta["output_tokens"] == 55
     req = mock_server.state.requests[-1]
     assert req["path"] == "/v1/messages"
     h, b = req["headers"], req["body"]
-    assert h["x-api-key"] == "sk-test"
+    assert h["x-api-key"] == "test-key-anthropic"
     assert h["anthropic-version"] == "2026-10-21"
     assert h["anthropic-beta"] == "server-side-fallback-2026-07-01"
     assert b["fallbacks"] == "default"
@@ -106,3 +108,32 @@ def test_run_audit_mixed_providers(mock_server, monkeypatch):
     assert all(r["error"] == "kunci API tidak ditemukan" for r in recs if r["provider"] == "openai")
     res = gva.analyze(gva.records_to_df(recs), cfg)
     assert res["headline"]["responses_ok"] == 8
+
+
+def test_redirect_is_refused_so_key_never_leaves(mock_server):
+    o = opts(mock_server)
+    o["base_urls"]["anthropic"] = mock_server.base + "/redir"
+    with pytest.raises(gva.ProviderError, match="redirect ditolak"):
+        gva.call_anthropic("claude-opus-5-5", "x", "test-key-anthropic", o)
+    assert len(mock_server.state.requests) == 1  # tidak mengikuti ke host lain
+
+
+def test_key_never_sent_over_plain_http_to_remote_host():
+    with pytest.raises(gva.ProviderError, match="HTTP tanpa enkripsi"):
+        gva.call_gemini("m", "x", "test-key-gemini", {"base_urls": {"gemini": "http://example.com/v1beta"}})
+    gva.check_endpoint("http://127.0.0.1:8080/v1", True)       # loopback boleh (Ollama/tes)
+    gva.check_endpoint("http://192.168.1.5:11434/v1", False)   # tanpa kunci boleh
+    with pytest.raises(gva.ProviderError):
+        gva.check_endpoint("file:///etc/passwd", False)
+
+
+def test_errors_are_redacted(mock_server):
+    secret = "test-key-" + "x" * 24
+    fake_ant, fake_goog = "sk-" + "ant-api03-" + "A" * 16, "AI" + "za" + "B" * 30  # dirakit agar bukan literal kunci
+    msg = gva.redact(f"bad key {secret} and {fake_ant} and {fake_goog}", secret)
+    assert secret not in msg and "sk-ant-api03" not in msg and "AIzaBBBB" not in msg
+    mock_server.state.unauthorized = True
+    cfg = gva.load_config()
+    recs = gva.run_audit([("gemini", "m")], cfg, ["id"], max_questions=1, keys={"gemini": secret},
+                         opts=opts(mock_server), workers=1)
+    assert recs[0]["status"] == "error" and secret not in json.dumps(recs)

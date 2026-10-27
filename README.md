@@ -43,7 +43,12 @@ tersedia sebagai *artifact* di tab Actions.
 * Klik dua kali `GEM-Visibility-Auditor.exe`: wizard bertanya provider, kunci API, pengulangan, dan bahasa,
   lalu membuka `report.html` di browser.
 * Dari terminal: `GEM-Visibility-Auditor.exe --demo` atau `GEM-Visibility-Auditor.exe --models anthropic gemini`.
-* Kunci API bisa ditaruh di file `.env` di folder yang sama dengan .exe (lihat `.env.example`).
+* Kunci API dibaca dari environment variable atau file `.env` di folder yang sama dengan .exe (lihat `.env.example`),
+  atau diketik di wizard (input tersembunyi). Kunci sengaja **tidak** bisa diberikan lewat argumen baris perintah.
+* Verifikasi unduhan: bandingkan SHA-256 file dengan `SHA256SUMS.txt` di halaman rilis
+  (PowerShell: `Get-FileHash .\GEM-Visibility-Auditor.exe`). File belum ditandatangani kode, jadi SmartScreen bisa
+  memberi peringatan.
+* Rilis tidak pernah ditimpa. Rilis baru dibuat otomatis saat `__version__` di `gem_visibility_auditor.py` dinaikkan.
 
 **Build sendiri** (perintah persisnya juga ada di header masing-masing file):
 
@@ -81,28 +86,36 @@ pip install -r requirements.txt
 streamlit run streamlit_app.py
 ```
 
-Tiga sumber data: **Contoh (demo)**, **Jalankan audit baru** (pilih provider, model, kunci, bahasa, jumlah topik,
-dengan progress bar), dan **Unggah hasil** (`responses.csv` atau `dashboard_data.json`). Tab: share of voice,
-per bahasa, per model, per kategori, penjelajah jawaban dengan sorotan sebutan, dan unduhan (CSV + paket `.zip`).
+Tiga sumber data: **Jalankan audit baru** (pilih model, kunci, bahasa, jumlah topik, dengan progress bar),
+**Unggah hasil** (`responses.csv` atau `dashboard_data.json`), dan **Contoh (demo)**. Setelah data ada: KPI,
+insight otomatis, pilihan destinasi fokus dan pembanding, tab share of voice, per bahasa, per model, per kategori,
+penjelajah jawaban dengan pencarian dan sorotan, serta unduhan (CSV aman + paket `.zip`).
 
 **Deploy ke Streamlit Community Cloud:** share.streamlit.io, *New app*, pilih repo ini, file utama
 `streamlit_app.py`. Kunci API opsional diisi di *Settings > Secrets*:
 
 ```toml
-ANTHROPIC_API_KEY = "sk-ant-..."
+ANTHROPIC_API_KEY = "..."
 GEMINI_API_KEY = "..."
 ```
 
-## 5. Dashboard web (GitHub Pages)
+Perhatian: kunci di Secrets dipakai oleh siapa pun yang membuka aplikasi. Untuk aplikasi publik, kosongkan Secrets
+(pengguna menempel kunci sendiri) atau batasi akses aplikasi di pengaturan Streamlit Cloud.
 
-Folder `docs/` adalah situs statis tanpa build, dideploy otomatis oleh `.github/workflows/pages.yml`
-ke https://samuelhtampubolon.github.io/GEM-Visibility-Auditor/. Bila halaman belum aktif, buka
-*Settings > Pages* dan pilih **Source: GitHub Actions** (sekali saja), lalu jalankan ulang workflow.
+## 5. Aplikasi web (GitHub Pages)
 
-Fitur: contoh hasil demo, unggah `responses.csv`/`dashboard_data.json` dari skrip Python, dan **audit langsung dari
-browser** (Claude, Gemini, OpenAI, OpenRouter, atau endpoint OpenAI-compatible). Kunci hanya disimpan di memori tab
-dan dikirim langsung ke provider. Logika penghitungan di `docs/app.js` adalah cermin `gem_visibility_auditor.py`, dan
-kesamaannya diuji otomatis.
+Folder `docs/` adalah aplikasi web statis (tanpa server, tanpa build), dideploy otomatis oleh
+`.github/workflows/pages.yml` ke https://samuelhtampubolon.github.io/GEM-Visibility-Auditor/. Bila halaman belum
+aktif, buka *Settings > Pages* dan pilih **Source: GitHub Actions** (sekali saja), lalu jalankan ulang workflow.
+
+Tata letak aplikasi: panel kontrol (Audit baru / Impor / Demo, pilihan model dan kunci, bahasa, jumlah topik,
+pengulangan, estimasi jumlah permintaan) dan area kerja (progres audit langsung per model, KPI, head-to-head,
+insight otomatis, tab Peringkat / Bahasa / Model / Kategori / Jawaban, ekspor CSV/JSON/PDF). Destinasi fokus dan
+pembanding bisa diganti kapan saja. Tema terang/gelap, responsif di ponsel.
+
+Provider dari browser: Claude, Gemini, ChatGPT, OpenRouter, Groq, DeepSeek, Mistral, dan Ollama lokal (sebagian
+provider bisa memblokir akses browser lewat CORS; gunakan CLI/Colab bila demikian). Logika penghitungan di
+`docs/app.js` adalah cermin `gem_visibility_auditor.py`, dan kesamaannya (termasuk insight) diuji otomatis.
 
 Lokal: `python -m http.server -d docs 8000` lalu buka http://localhost:8000.
 
@@ -174,7 +187,7 @@ Setiap audit membuat folder `gem_audit_output/audit_<waktu>/`:
 ```bash
 pip install -r requirements-dev.txt
 python -m playwright install chromium
-python -m pytest -v                    # 46 tes
+python -m pytest -v                    # seluruh tes (fungsi, UI, keamanan)
 bash scripts/clean_env_test.sh         # uji di lingkungan bersih + build .exe
 ```
 
@@ -187,13 +200,29 @@ Yang diuji end-to-end:
 * **Google Colab**: seluruh isi file dijalankan dalam **satu sel** notebook Jupyter (nbclient), grafik tampil inline;
   notebook `GEM_Visibility_Auditor_Colab.ipynb` dicek identik dengan file .py dan ikut dijalankan.
 * **Streamlit**: AppTest untuk demo, audit baru, validasi kunci; plus server `streamlit run` sungguhan + screenshot.
-* **Dashboard web**: Chromium (Playwright): muat contoh, unggah CSV, audit di browser dengan API yang di-mock,
-  kesamaan angka dengan Python, tata letak ponsel tanpa scroll horizontal.
+* **Aplikasi web**: Chromium (Playwright): layar awal, demo, impor CSV, audit di browser dengan API yang di-mock,
+  ganti fokus, kesamaan angka dan insight dengan Python, ekspor, tema, tata letak ponsel.
+* **Keamanan**: payload XSS dari file impor tidak dieksekusi, CSP memblokir host asing, kunci tidak bocor ke
+  state/storage/ekspor/pesan error, redirect ditolak, kunci tidak dikirim lewat HTTP tanpa enkripsi, CSV formula
+  injection dinetralkan, konfigurasi tidak tepercaya ditolak, opsi `--key` dihapus.
 * **.exe**: build PyInstaller `--onefile` lalu smoke test (Linux di skrip bersih, Windows di GitHub Actions).
 
 Bukti eksekusi tersimpan di [`evidence/`](evidence/): log uji lingkungan bersih dan screenshot dashboard.
 CI: `.github/workflows/tests.yml` (Ubuntu Python 3.10/3.12 + Windows), `build-exe.yml` (build + smoke test + Release),
 `pages.yml` (deploy GitHub Pages).
+
+## Keamanan
+
+Ringkasan (detail di [`SECURITY.md`](SECURITY.md)):
+
+* Kunci API hanya dari environment variable, `.env`, Colab Secrets, Streamlit Secrets, atau input tersembunyi;
+  tidak pernah dari argumen CLI, tidak ditulis ke file hasil atau log, dan disensor dari pesan error.
+* Permintaan API tidak mengikuti redirect (header kunci tidak bisa terbawa ke host lain) dan kunci tidak pernah dikirim
+  lewat HTTP tanpa enkripsi kecuali ke `localhost`.
+* Aplikasi web: Content Security Policy ketat (`default-src 'none'`, hanya endpoint resmi provider), tanpa
+  `innerHTML` untuk data, tanpa penyimpanan kunci, persetujuan eksplisit sebelum kunci dikirim dari browser.
+* CSV hasil aman dibuka di Excel/Sheets; laporan HTML memakai CSP tanpa skrip.
+* CI: action di-pin ke SHA commit, izin token minimum, rilis tidak bisa ditimpa, checksum SHA-256, Dependabot.
 
 ## Keterbatasan
 
@@ -213,5 +242,6 @@ scripts/clean_env_test.sh   # uji lingkungan bersih
 scripts/build_colab_notebook.py  # bangun ulang notebook Colab dari file .py
 GEM_Visibility_Auditor_Colab.ipynb  # notebook Colab satu sel (Open in Colab)
 evidence/                   # log dan screenshot bukti eksekusi
+SECURITY.md                 # kebijakan dan catatan keamanan
 .github/workflows/          # CI tes, build .exe + Release, deploy Pages
 ```

@@ -144,3 +144,37 @@ def test_no_em_dash_in_sources(root):
         if p.suffix in {".png", ".ico"}:
             continue
         assert chr(0x2014) not in p.read_text(encoding="utf-8"), f"em dash di {p}"
+
+
+def test_csv_formula_injection_neutralized(cfg, tmp_path):
+    recs = [_rec("a", "m1", "id", "=HYPERLINK(\"http://evil\",\"klik\") Bali"),
+            _rec("b", "m1", "en", "- Lake Toba\n- Bali"), _rec("c", "m1", "en", "@SUM(1) Komodo")]
+    df = gva.records_to_df(recs)
+    raw = gva.to_csv_bytes(df).decode("utf-8-sig")
+    assert "\n=" not in raw and ",=" not in raw and "'=HYPERLINK" in raw and "'@SUM" in raw
+    path = tmp_path / "r.csv"
+    path.write_bytes(gva.to_csv_bytes(df))
+    back = gva.read_responses_csv(str(path))
+    assert list(back["response"]) == list(df["response"])  # isi asli kembali utuh
+
+
+def test_untrusted_config_rejected(tmp_path):
+    bad = [
+        '{"destinations": [{"id": "x<script>", "name": "X", "aliases": ["x"]}], "focus": "x<script>"}',
+        '{"destinations": "bukan daftar"}',
+        '{"destinations": [{"id": "a", "name": "A", "aliases": [1, 2]}], "focus": "a", "competitors": []}',
+        '{"questions": [{"qid": "Q", "text": {"id": 5}}]}',
+    ]
+    for i, txt in enumerate(bad):
+        p = tmp_path / f"c{i}.json"
+        p.write_text(txt, encoding="utf-8")
+        with pytest.raises(ValueError):
+            gva.load_config(str(p))
+
+
+def test_insights(cfg):
+    recs = gva.run_audit([("demo", "simulasi-a"), ("demo", "simulasi-b")], cfg, ["id", "en"], workers=1)
+    res = gva.analyze(gva.records_to_df(recs), cfg)
+    ins = gva.build_insights(res)
+    assert len(ins) >= 6 and ins[0].startswith("Danau Toba berada di peringkat")
+    assert any("Setiap 100 sebutan Bali" in t for t in ins)

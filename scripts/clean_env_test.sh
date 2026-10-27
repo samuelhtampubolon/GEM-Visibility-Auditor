@@ -55,10 +55,13 @@ with sync_playwright() as p:
     b = p.chromium.launch(executable_path=exe) if exe else p.chromium.launch()
     pg = b.new_page(viewport={"width": 1300, "height": 1000})
     pg.goto("http://localhost:8597/")
+    pg.wait_for_selector("text=Seberapa sering AI merekomendasikan Danau Toba?", timeout=60000)
+    pg.screenshot(path=os.path.join(os.environ["EVID"], "streamlit_01_start.png"))
+    pg.get_by_text("Contoh (demo)").click()
     pg.wait_for_selector("text=SOV Danau Toba", timeout=60000)
     pg.wait_for_timeout(2500)
     errs = pg.locator('[data-testid="stException"]').count()
-    pg.screenshot(path=os.path.join(os.environ["EVID"], "streamlit_dashboard.png"))
+    pg.screenshot(path=os.path.join(os.environ["EVID"], "streamlit_02_dashboard.png"))
     print("Streamlit dirender, metrik:", pg.locator('[data-testid="stMetricLabel"]').all_inner_texts(), "exceptions:", errs)
     assert errs == 0
     b.close()
@@ -82,4 +85,5 @@ PYEOF
   echo; echo "## SEMUA LANGKAH LULUS"
 }
 
-run 2>&1 | tee "$LOG"
+# Path folder kerja sementara disamarkan di log bukti.
+run 2>&1 | sed -u "s#$WORK#<work>#g" | tee "$LOG"

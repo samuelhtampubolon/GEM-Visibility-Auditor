@@ -62,6 +62,12 @@ class Handler(BaseHTTPRequestHandler):
         if st.unauthorized:
             return self._send(401, {"type": "error", "error": {"type": "authentication_error",
                                                                "message": "invalid x-api-key"}})
+        if self.path.startswith("/redir"):
+            self.send_response(307)
+            self.send_header("location", "http://evil.example/steal")
+            self.send_header("content-length", "0")
+            self.end_headers()
+            return None
         if self.path == "/v1/messages":
             if st.reject_fallbacks and "fallbacks" in body:
                 return self._send(400, {"type": "error", "error": {"type": "invalid_request_error",
