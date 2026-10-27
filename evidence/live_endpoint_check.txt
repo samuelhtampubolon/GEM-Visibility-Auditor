@@ -1,9 +1,9 @@
-## Uji endpoint API asli dengan kunci SENGAJA tidak valid (2026-10-27T03:25:45Z)
+## Uji endpoint API asli dengan kunci SENGAJA tidak valid (2026-10-27T10:31:14Z)
 ## Tujuan: membuktikan URL, header, dan penanganan error ke server Anthropic dan Google sungguhan.
-## Kunci diberikan lewat environment variable (opsi --key sudah dihapus demi keamanan).
+## Kunci diberikan lewat environment variable (opsi --key tidak ada demi keamanan).
 ## (Tidak ada kunci API asli di lingkungan uji ini, jadi jawaban sukses diuji lewat server tiruan.)
 $ ANTHROPIC_API_KEY=invalid-test-key GEMINI_API_KEY=invalid-test-key python gem_visibility_auditor.py --models anthropic gemini --max-questions 1 --langs id
-GEM Visibility Auditor v1.1.0
+GEM Visibility Auditor v1.1.1
 Model: anthropic:claude-opus-5-5, gemini:gemini-flash-latest
 Bahasa: id | runs: 1 | total permintaan: 2
 Folder hasil: <tmp>/livecheck

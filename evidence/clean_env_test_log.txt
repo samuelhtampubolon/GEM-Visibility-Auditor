@@ -1,28 +1,28 @@
 
-## Bersih: 2026-10-27T04:08:26Z
+## Bersih: 2026-10-27T10:28:04Z
 ## Sistem: Linux 6.18.44-fc-v165 x86_64, Python 3.13.17
-## Commit: 807e2585706aa84333d91baea60cae598e661797
+## Commit: 2227eccc9c57bb2993ec280608c0509a35c9287e
 ## Folder kerja: <work>
 ## Isi checkout bersih:
 total 268
-drwxr-xr-x 8 root root  4096 Oct 27 04:08 .
-drwx------ 3 root root  4096 Oct 27 04:08 ..
--rw-rw-r-- 1 root root   211 Oct 27 04:08 .env.example
-drwxrwxr-x 3 root root  4096 Oct 27 04:08 .github
--rw-rw-r-- 1 root root   120 Oct 27 04:08 .gitignore
-drwxrwxr-x 2 root root  4096 Oct 27 04:08 .streamlit
--rw-rw-r-- 1 root root 99046 Oct 27 04:08 GEM_Visibility_Auditor_Colab.ipynb
--rw-rw-r-- 1 root root 15032 Oct 27 04:08 README.md
--rw-rw-r-- 1 root root  3171 Oct 27 04:08 SECURITY.md
--rw-rw-r-- 1 root root  1239 Oct 27 04:08 dashboard_launcher.py
-drwxrwxr-x 3 root root  4096 Oct 27 04:08 docs
-drwxrwxr-x 2 root root  4096 Oct 27 04:08 evidence
--rw-rw-r-- 1 root root 79624 Oct 27 04:08 gem_visibility_auditor.py
--rw-rw-r-- 1 root root   109 Oct 27 04:08 requirements-dev.txt
--rw-rw-r-- 1 root root   158 Oct 27 04:08 requirements.txt
-drwxrwxr-x 2 root root  4096 Oct 27 04:08 scripts
--rw-rw-r-- 1 root root 16071 Oct 27 04:08 streamlit_app.py
-drwxrwxr-x 2 root root  4096 Oct 27 04:08 tests
+drwxr-xr-x 8 root root  4096 Oct 27 10:28 .
+drwx------ 3 root root  4096 Oct 27 10:28 ..
+-rw-rw-r-- 1 root root   211 Oct 27 10:27 .env.example
+drwxrwxr-x 3 root root  4096 Oct 27 10:27 .github
+-rw-rw-r-- 1 root root   120 Oct 27 10:27 .gitignore
+drwxrwxr-x 2 root root  4096 Oct 27 10:27 .streamlit
+-rw-rw-r-- 1 root root 99045 Oct 27 10:27 GEM_Visibility_Auditor_Colab.ipynb
+-rw-rw-r-- 1 root root 15002 Oct 27 10:27 README.md
+-rw-rw-r-- 1 root root  3171 Oct 27 10:27 SECURITY.md
+-rw-rw-r-- 1 root root  1239 Oct 27 10:27 dashboard_launcher.py
+drwxrwxr-x 3 root root  4096 Oct 27 10:27 docs
+drwxrwxr-x 2 root root  4096 Oct 27 10:27 evidence
+-rw-rw-r-- 1 root root 79623 Oct 27 10:27 gem_visibility_auditor.py
+-rw-rw-r-- 1 root root   109 Oct 27 10:27 requirements-dev.txt
+-rw-rw-r-- 1 root root   158 Oct 27 10:27 requirements.txt
+drwxrwxr-x 2 root root  4096 Oct 27 10:27 scripts
+-rw-rw-r-- 1 root root 16071 Oct 27 10:27 streamlit_app.py
+drwxrwxr-x 2 root root  4096 Oct 27 10:27 tests
 
 ## [1/4] virtualenv baru + pip install -r requirements-dev.txt
 ipykernel==7.4.0
@@ -36,7 +36,7 @@ requests==2.34.2
 streamlit==1.66.1
 
 ## [2/4] CLI mode demo
-GEM Visibility Auditor v1.1.0
+GEM Visibility Auditor v1.1.1
 Model: demo:simulasi-a, demo:simulasi-b
 Bahasa: id, en | runs: 1 | total permintaan: 60
 MODE DEMO: jawaban disimulasikan secara offline (bukan data nyata).
@@ -44,64 +44,64 @@ Folder hasil: <work>/demo_out
 
 [  1/60] ok  demo:simulasi-a                          Q01-id run1   0.0s
 [  2/60] ok  demo:simulasi-a                          Q01-en run1   0.0s
-[  3/60] ok  demo:simulasi-a                          Q02-en run1   0.0s
-[  4/60] ok  demo:simulasi-a                          Q02-id run1   0.0s
-[  5/60] ok  demo:simulasi-a                          Q03-id run1   0.0s
-[  6/60] ok  demo:simulasi-a                          Q03-en run1   0.0s
+[  3/60] ok  demo:simulasi-a                          Q03-id run1   0.0s
+[  4/60] ok  demo:simulasi-a                          Q02-en run1   0.0s
+[  5/60] ok  demo:simulasi-a                          Q04-en run1   0.0s
+[  6/60] ok  demo:simulasi-a                          Q05-id run1   0.0s
 [  7/60] ok  demo:simulasi-a                          Q05-en run1   0.0s
 [  8/60] ok  demo:simulasi-a                          Q06-id run1   0.0s
 [  9/60] ok  demo:simulasi-a                          Q06-en run1   0.0s
-[ 10/60] ok  demo:simulasi-a                          Q04-id run1   0.0s
-[ 11/60] ok  demo:simulasi-a                          Q04-en run1   0.0s
-[ 12/60] ok  demo:simulasi-a                          Q05-id run1   0.0s
-[ 13/60] ok  demo:simulasi-a                          Q08-en run1   0.0s
+[ 10/60] ok  demo:simulasi-a                          Q07-id run1   0.0s
+[ 11/60] ok  demo:simulasi-a                          Q02-id run1   0.0s
+[ 12/60] ok  demo:simulasi-a                          Q08-id run1   0.0s
+[ 13/60] ok  demo:simulasi-a                          Q04-id run1   0.0s
 [ 14/60] ok  demo:simulasi-a                          Q09-id run1   0.0s
-[ 15/60] ok  demo:simulasi-a                          Q09-en run1   0.0s
-[ 16/60] ok  demo:simulasi-a                          Q07-id run1   0.0s
+[ 15/60] ok  demo:simulasi-a                          Q03-en run1   0.0s
+[ 16/60] ok  demo:simulasi-a                          Q10-id run1   0.0s
 [ 17/60] ok  demo:simulasi-a                          Q07-en run1   0.0s
-[ 18/60] ok  demo:simulasi-a                          Q08-id run1   0.0s
-[ 19/60] ok  demo:simulasi-a                          Q11-en run1   0.0s
+[ 18/60] ok  demo:simulasi-a                          Q11-id run1   0.0s
+[ 19/60] ok  demo:simulasi-a                          Q08-en run1   0.0s
 [ 20/60] ok  demo:simulasi-a                          Q12-id run1   0.0s
-[ 21/60] ok  demo:simulasi-a                          Q12-en run1   0.0s
+[ 21/60] ok  demo:simulasi-a                          Q09-en run1   0.0s
 [ 22/60] ok  demo:simulasi-a                          Q13-id run1   0.0s
-[ 23/60] ok  demo:simulasi-a                          Q13-en run1   0.0s
+[ 23/60] ok  demo:simulasi-a                          Q10-en run1   0.0s
 [ 24/60] ok  demo:simulasi-a                          Q14-id run1   0.0s
-[ 25/60] ok  demo:simulasi-a                          Q10-id run1   0.0s
-[ 26/60] ok  demo:simulasi-a                          Q10-en run1   0.0s
-[ 27/60] ok  demo:simulasi-a                          Q11-id run1   0.0s
+[ 25/60] ok  demo:simulasi-a                          Q11-en run1   0.0s
+[ 26/60] ok  demo:simulasi-a                          Q15-id run1   0.0s
+[ 27/60] ok  demo:simulasi-a                          Q12-en run1   0.0s
 [ 28/60] ok  demo:simulasi-b                          Q01-id run1   0.0s
-[ 29/60] ok  demo:simulasi-b                          Q01-en run1   0.0s
+[ 29/60] ok  demo:simulasi-a                          Q13-en run1   0.0s
 [ 30/60] ok  demo:simulasi-b                          Q02-id run1   0.0s
 [ 31/60] ok  demo:simulasi-a                          Q14-en run1   0.0s
-[ 32/60] ok  demo:simulasi-a                          Q15-id run1   0.0s
-[ 33/60] ok  demo:simulasi-a                          Q15-en run1   0.0s
-[ 34/60] ok  demo:simulasi-b                          Q04-id run1   0.0s
+[ 32/60] ok  demo:simulasi-b                          Q03-id run1   0.0s
+[ 33/60] ok  demo:simulasi-b                          Q03-en run1   0.0s
+[ 34/60] ok  demo:simulasi-a                          Q15-en run1   0.0s
 [ 35/60] ok  demo:simulasi-b                          Q04-en run1   0.0s
 [ 36/60] ok  demo:simulasi-b                          Q05-id run1   0.0s
 [ 37/60] ok  demo:simulasi-b                          Q05-en run1   0.0s
-[ 38/60] ok  demo:simulasi-b                          Q02-en run1   0.0s
-[ 39/60] ok  demo:simulasi-b                          Q03-en run1   0.0s
-[ 40/60] ok  demo:simulasi-b                          Q03-id run1   0.0s
-[ 41/60] ok  demo:simulasi-b                          Q07-en run1   0.0s
-[ 42/60] ok  demo:simulasi-b                          Q08-id run1   0.0s
+[ 38/60] ok  demo:simulasi-b                          Q01-en run1   0.0s
+[ 39/60] ok  demo:simulasi-b                          Q02-en run1   0.0s
+[ 40/60] ok  demo:simulasi-b                          Q04-id run1   0.0s
+[ 41/60] ok  demo:simulasi-b                          Q06-id run1   0.0s
+[ 42/60] ok  demo:simulasi-b                          Q06-en run1   0.0s
 [ 43/60] ok  demo:simulasi-b                          Q08-en run1   0.0s
-[ 44/60] ok  demo:simulasi-b                          Q06-id run1   0.0s
-[ 45/60] ok  demo:simulasi-b                          Q06-en run1   0.0s
+[ 44/60] ok  demo:simulasi-b                          Q09-id run1   0.0s
+[ 45/60] ok  demo:simulasi-b                          Q09-en run1   0.0s
 [ 46/60] ok  demo:simulasi-b                          Q07-id run1   0.0s
-[ 47/60] ok  demo:simulasi-b                          Q10-en run1   0.0s
-[ 48/60] ok  demo:simulasi-b                          Q11-id run1   0.0s
+[ 47/60] ok  demo:simulasi-b                          Q07-en run1   0.0s
+[ 48/60] ok  demo:simulasi-b                          Q08-id run1   0.0s
 [ 49/60] ok  demo:simulasi-b                          Q11-en run1   0.0s
-[ 50/60] ok  demo:simulasi-b                          Q09-id run1   0.0s
-[ 51/60] ok  demo:simulasi-b                          Q09-en run1   0.0s
+[ 50/60] ok  demo:simulasi-b                          Q12-id run1   0.0s
+[ 51/60] ok  demo:simulasi-b                          Q12-en run1   0.0s
 [ 52/60] ok  demo:simulasi-b                          Q10-id run1   0.0s
 [ 53/60] ok  demo:simulasi-b                          Q13-en run1   0.0s
-[ 54/60] ok  demo:simulasi-b                          Q14-id run1   0.0s
+[ 54/60] ok  demo:simulasi-b                          Q11-id run1   0.0s
 [ 55/60] ok  demo:simulasi-b                          Q14-en run1   0.0s
-[ 56/60] ok  demo:simulasi-b                          Q12-id run1   0.0s
-[ 57/60] ok  demo:simulasi-b                          Q12-en run1   0.0s
+[ 56/60] ok  demo:simulasi-b                          Q10-en run1   0.0s
+[ 57/60] ok  demo:simulasi-b                          Q15-en run1   0.0s
 [ 58/60] ok  demo:simulasi-b                          Q13-id run1   0.0s
 [ 59/60] ok  demo:simulasi-b                          Q15-id run1   0.0s
-[ 60/60] ok  demo:simulasi-b                          Q15-en run1   0.0s
+[ 60/60] ok  demo:simulasi-b                          Q14-id run1   0.0s
 
 ==============================================================================
  #  Destinasi                  Sebutan    SOV %  Mention %  Urutan
@@ -143,27 +143,27 @@ File hasil di: <work>/demo_out
   - dashboard_data.json
 Arsip: <work>/demo_out.zip
 total 1244
-drwxr-xr-x 2 root root   4096 Oct 27 04:08 .
-drwx------ 5 root root   4096 Oct 27 04:08 ..
--rw-r--r-- 1 root root  61122 Oct 27 04:08 dashboard_data.json
--rw-r--r-- 1 root root 101812 Oct 27 04:08 mention_rate.png
--rw-r--r-- 1 root root  75092 Oct 27 04:08 mentions.csv
--rw-r--r-- 1 root root 590484 Oct 27 04:08 report.html
--rw-r--r-- 1 root root  34057 Oct 27 04:08 responses.csv
--rw-r--r-- 1 root root  50888 Oct 27 04:08 responses.jsonl
--rw-r--r-- 1 root root 114276 Oct 27 04:08 share_of_voice.png
--rw-r--r-- 1 root root   9913 Oct 27 04:08 sov_by_category.csv
--rw-r--r-- 1 root root   1427 Oct 27 04:08 sov_by_language.csv
--rw-r--r-- 1 root root  91564 Oct 27 04:08 sov_by_language.png
--rw-r--r-- 1 root root   1719 Oct 27 04:08 sov_by_model.csv
--rw-r--r-- 1 root root 104598 Oct 27 04:08 sov_by_model.png
--rw-r--r-- 1 root root    711 Oct 27 04:08 summary.csv
+drwxr-xr-x 2 root root   4096 Oct 27 10:29 .
+drwx------ 5 root root   4096 Oct 27 10:29 ..
+-rw-r--r-- 1 root root  61122 Oct 27 10:29 dashboard_data.json
+-rw-r--r-- 1 root root 101812 Oct 27 10:29 mention_rate.png
+-rw-r--r-- 1 root root  75092 Oct 27 10:29 mentions.csv
+-rw-r--r-- 1 root root 590484 Oct 27 10:29 report.html
+-rw-r--r-- 1 root root  34057 Oct 27 10:29 responses.csv
+-rw-r--r-- 1 root root  50888 Oct 27 10:28 responses.jsonl
+-rw-r--r-- 1 root root 114276 Oct 27 10:29 share_of_voice.png
+-rw-r--r-- 1 root root   9913 Oct 27 10:29 sov_by_category.csv
+-rw-r--r-- 1 root root   1427 Oct 27 10:29 sov_by_language.csv
+-rw-r--r-- 1 root root  91564 Oct 27 10:29 sov_by_language.png
+-rw-r--r-- 1 root root   1719 Oct 27 10:29 sov_by_model.csv
+-rw-r--r-- 1 root root 104598 Oct 27 10:29 sov_by_model.png
+-rw-r--r-- 1 root root    711 Oct 27 10:29 summary.csv
 
 ## [3/4] pytest lengkap
 ============================= test session starts ==============================
 platform linux -- Python 3.13.17, pytest-9.1.1, pluggy-1.7.0 -- <work>/venv/bin/python
 rootdir: <work>/src
-plugins: platformdirs-4.13.5, anyio-4.15.1
+plugins: anyio-4.15.1, platformdirs-4.13.6
 collecting ... collected 64 items
 
 tests/test_cli_e2e.py::test_demo_end_to_end PASSED                       [  1%]
@@ -231,21 +231,20 @@ tests/test_web_dashboard.py::test_mobile_layout PASSED                   [ 96%]
 tests/test_web_dashboard.py::test_mobile_layout_with_wide_font[320] PASSED [ 98%]
 tests/test_web_dashboard.py::test_mobile_layout_with_wide_font[375] PASSED [100%]
 
-======================== 62 passed, 2 skipped in 43.60s ========================
+======================== 62 passed, 2 skipped in 50.03s ========================
 
 ## [3b/4] server Streamlit sungguhan (streamlit run) + screenshot
 health: ok
 Streamlit dirender, metrik: ['SOV Danau Toba', 'Peringkat Danau Toba', 'SOV Bali', 'SOV Labuan Bajo'] exceptions: 0
-scripts/clean_env_test.sh: line 69: kill: (11186) - No such process
 
 ## [4/4] build .exe PyInstaller (venv terpisah, dependensi inti saja)
-43092 INFO: Building EXE from EXE-00.toc completed successfully.
-43098 INFO: Build complete! The results are available in: <work>/src/dist
-total 58696
-drwxr-xr-x  2 root root     4096 Oct 27 04:10 .
-drwxr-xr-x 11 root root     4096 Oct 27 04:10 ..
--rwxr-xr-x  1 root root 60092840 Oct 27 04:10 GEM-Visibility-Auditor
-gem_visibility_auditor 1.1.0
+49927 INFO: Building EXE from EXE-00.toc completed successfully.
+49935 INFO: Build complete! The results are available in: <work>/src/dist
+total 58692
+drwxr-xr-x  2 root root     4096 Oct 27 10:31 .
+drwxr-xr-x 11 root root     4096 Oct 27 10:30 ..
+-rwxr-xr-x  1 root root 60091992 Oct 27 10:31 GEM-Visibility-Auditor
+gem_visibility_auditor 1.1.1
 ============================= test session starts ==============================
 platform linux -- Python 3.13.17, pytest-9.1.1, pluggy-1.7.0 -- <work>/venv-exe/bin/python
 rootdir: <work>/src
@@ -254,6 +253,6 @@ collecting ... collected 2 items
 tests/test_exe.py::test_exe_demo_run PASSED                              [ 50%]
 tests/test_exe.py::test_exe_version_and_questions PASSED                 [100%]
 
-============================== 2 passed in 4.05s ===============================
+============================== 2 passed in 4.90s ===============================
 
 ## SEMUA LANGKAH LULUS
