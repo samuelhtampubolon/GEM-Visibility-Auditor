@@ -1,6 +1,6 @@
 # Inti (CLI, Colab, .exe)
 pandas>=1.5
-matplotlib>=3.6
+matplotlib>=3.11.2
 requests>=2.28
 # Dashboard (streamlit run streamlit_app.py / Streamlit Community Cloud)
 streamlit>=1.46
