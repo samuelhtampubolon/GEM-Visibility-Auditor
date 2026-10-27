@@ -1,0 +1,17 @@
+[theme]
+base = "light"
+primaryColor = "#2a78d6"
+
+[server]
+# Batas unggahan sesuai validasi di aplikasi; XSRF dan CORS tetap aktif (bawaan aman).
+maxUploadSize = 25
+enableXsrfProtection = true
+enableCORS = true
+
+[client]
+# Jangan tampilkan stack trace ke pengunjung aplikasi yang dideploy.
+showErrorDetails = "type"
+toolbarMode = "viewer"
+
+[browser]
+gatherUsageStats = false
