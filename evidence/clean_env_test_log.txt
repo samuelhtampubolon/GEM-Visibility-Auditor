@@ -1,28 +1,28 @@
 
-## Bersih: 2026-10-27T03:21:29Z
+## Bersih: 2026-10-27T03:23:14Z
 ## Sistem: Linux 6.18.44-fc-v165 x86_64, Python 3.13.17
-## Commit: 36f4a2bbf094011e2e3c7e3851d3d247ab3bba3a
+## Commit: b41028f327b5846af4171a6c2c9efa8fddadc0e6
 ## Folder kerja: <work>
 ## Isi checkout bersih:
 total 268
-drwxr-xr-x 8 root root  4096 Oct 27 03:21 .
-drwx------ 3 root root  4096 Oct 27 03:21 ..
--rw-rw-r-- 1 root root   211 Oct 27 03:21 .env.example
-drwxrwxr-x 3 root root  4096 Oct 27 03:21 .github
--rw-rw-r-- 1 root root   120 Oct 27 03:21 .gitignore
-drwxrwxr-x 2 root root  4096 Oct 27 03:21 .streamlit
--rw-rw-r-- 1 root root 98958 Oct 27 03:21 GEM_Visibility_Auditor_Colab.ipynb
--rw-rw-r-- 1 root root 15032 Oct 27 03:21 README.md
--rw-rw-r-- 1 root root  3171 Oct 27 03:21 SECURITY.md
--rw-rw-r-- 1 root root  1239 Oct 27 03:21 dashboard_launcher.py
-drwxrwxr-x 3 root root  4096 Oct 27 03:21 docs
-drwxrwxr-x 2 root root  4096 Oct 27 03:21 evidence
--rw-rw-r-- 1 root root 79556 Oct 27 03:21 gem_visibility_auditor.py
--rw-rw-r-- 1 root root   109 Oct 27 03:21 requirements-dev.txt
--rw-rw-r-- 1 root root   158 Oct 27 03:21 requirements.txt
-drwxrwxr-x 2 root root  4096 Oct 27 03:21 scripts
--rw-rw-r-- 1 root root 16071 Oct 27 03:21 streamlit_app.py
-drwxrwxr-x 2 root root  4096 Oct 27 03:21 tests
+drwxr-xr-x 8 root root  4096 Oct 27 03:23 .
+drwx------ 3 root root  4096 Oct 27 03:23 ..
+-rw-rw-r-- 1 root root   211 Oct 27 03:23 .env.example
+drwxrwxr-x 3 root root  4096 Oct 27 03:23 .github
+-rw-rw-r-- 1 root root   120 Oct 27 03:23 .gitignore
+drwxrwxr-x 2 root root  4096 Oct 27 03:23 .streamlit
+-rw-rw-r-- 1 root root 98958 Oct 27 03:23 GEM_Visibility_Auditor_Colab.ipynb
+-rw-rw-r-- 1 root root 15032 Oct 27 03:23 README.md
+-rw-rw-r-- 1 root root  3171 Oct 27 03:23 SECURITY.md
+-rw-rw-r-- 1 root root  1239 Oct 27 03:23 dashboard_launcher.py
+drwxrwxr-x 3 root root  4096 Oct 27 03:23 docs
+drwxrwxr-x 2 root root  4096 Oct 27 03:23 evidence
+-rw-rw-r-- 1 root root 79556 Oct 27 03:23 gem_visibility_auditor.py
+-rw-rw-r-- 1 root root   109 Oct 27 03:23 requirements-dev.txt
+-rw-rw-r-- 1 root root   158 Oct 27 03:23 requirements.txt
+drwxrwxr-x 2 root root  4096 Oct 27 03:23 scripts
+-rw-rw-r-- 1 root root 16071 Oct 27 03:23 streamlit_app.py
+drwxrwxr-x 2 root root  4096 Oct 27 03:23 tests
 
 ## [1/4] virtualenv baru + pip install -r requirements-dev.txt
 ipykernel==7.4.0
@@ -45,63 +45,63 @@ Folder hasil: <work>/demo_out
 [  1/60] ok  demo:simulasi-a                          Q01-id run1   0.0s
 [  2/60] ok  demo:simulasi-a                          Q01-en run1   0.0s
 [  3/60] ok  demo:simulasi-a                          Q02-id run1   0.0s
-[  4/60] ok  demo:simulasi-a                          Q02-en run1   0.0s
-[  5/60] ok  demo:simulasi-a                          Q03-id run1   0.0s
-[  6/60] ok  demo:simulasi-a                          Q03-en run1   0.0s
-[  7/60] ok  demo:simulasi-a                          Q05-en run1   0.0s
+[  4/60] ok  demo:simulasi-a                          Q03-id run1   0.0s
+[  5/60] ok  demo:simulasi-a                          Q04-en run1   0.0s
+[  6/60] ok  demo:simulasi-a                          Q05-id run1   0.0s
+[  7/60] ok  demo:simulasi-a                          Q02-en run1   0.0s
 [  8/60] ok  demo:simulasi-a                          Q06-id run1   0.0s
-[  9/60] ok  demo:simulasi-a                          Q06-en run1   0.0s
-[ 10/60] ok  demo:simulasi-a                          Q04-id run1   0.0s
+[  9/60] ok  demo:simulasi-a                          Q03-en run1   0.0s
+[ 10/60] ok  demo:simulasi-a                          Q07-id run1   0.0s
 [ 11/60] ok  demo:simulasi-a                          Q07-en run1   0.0s
 [ 12/60] ok  demo:simulasi-a                          Q08-id run1   0.0s
-[ 13/60] ok  demo:simulasi-a                          Q08-en run1   0.0s
-[ 14/60] ok  demo:simulasi-a                          Q04-en run1   0.0s
-[ 15/60] ok  demo:simulasi-a                          Q05-id run1   0.0s
-[ 16/60] ok  demo:simulasi-a                          Q10-id run1   0.0s
+[ 13/60] ok  demo:simulasi-a                          Q05-en run1   0.0s
+[ 14/60] ok  demo:simulasi-a                          Q04-id run1   0.0s
+[ 15/60] ok  demo:simulasi-a                          Q09-en run1   0.0s
+[ 16/60] ok  demo:simulasi-a                          Q06-en run1   0.0s
 [ 17/60] ok  demo:simulasi-a                          Q10-en run1   0.0s
 [ 18/60] ok  demo:simulasi-a                          Q11-id run1   0.0s
-[ 19/60] ok  demo:simulasi-a                          Q07-id run1   0.0s
+[ 19/60] ok  demo:simulasi-a                          Q11-en run1   0.0s
 [ 20/60] ok  demo:simulasi-a                          Q12-id run1   0.0s
-[ 21/60] ok  demo:simulasi-a                          Q12-en run1   0.0s
+[ 21/60] ok  demo:simulasi-a                          Q08-en run1   0.0s
 [ 22/60] ok  demo:simulasi-a                          Q13-id run1   0.0s
 [ 23/60] ok  demo:simulasi-a                          Q09-id run1   0.0s
-[ 24/60] ok  demo:simulasi-a                          Q09-en run1   0.0s
-[ 25/60] ok  demo:simulasi-a                          Q14-en run1   0.0s
+[ 24/60] ok  demo:simulasi-a                          Q14-id run1   0.0s
+[ 25/60] ok  demo:simulasi-a                          Q10-id run1   0.0s
 [ 26/60] ok  demo:simulasi-a                          Q15-id run1   0.0s
 [ 27/60] ok  demo:simulasi-a                          Q15-en run1   0.0s
-[ 28/60] ok  demo:simulasi-a                          Q11-en run1   0.0s
+[ 28/60] ok  demo:simulasi-b                          Q01-id run1   0.0s
 [ 29/60] ok  demo:simulasi-b                          Q01-en run1   0.0s
-[ 30/60] ok  demo:simulasi-b                          Q02-id run1   0.0s
+[ 30/60] ok  demo:simulasi-a                          Q12-en run1   0.0s
 [ 31/60] ok  demo:simulasi-b                          Q02-en run1   0.0s
 [ 32/60] ok  demo:simulasi-a                          Q13-en run1   0.0s
-[ 33/60] ok  demo:simulasi-a                          Q14-id run1   0.0s
-[ 34/60] ok  demo:simulasi-b                          Q04-id run1   0.0s
+[ 33/60] ok  demo:simulasi-b                          Q03-en run1   0.0s
+[ 34/60] ok  demo:simulasi-a                          Q14-en run1   0.0s
 [ 35/60] ok  demo:simulasi-b                          Q04-en run1   0.0s
 [ 36/60] ok  demo:simulasi-b                          Q05-id run1   0.0s
-[ 37/60] ok  demo:simulasi-b                          Q01-id run1   0.0s
+[ 37/60] ok  demo:simulasi-b                          Q05-en run1   0.0s
 [ 38/60] ok  demo:simulasi-b                          Q06-id run1   0.0s
-[ 39/60] ok  demo:simulasi-b                          Q06-en run1   0.0s
+[ 39/60] ok  demo:simulasi-b                          Q02-id run1   0.0s
 [ 40/60] ok  demo:simulasi-b                          Q07-id run1   0.0s
 [ 41/60] ok  demo:simulasi-b                          Q03-id run1   0.0s
-[ 42/60] ok  demo:simulasi-b                          Q03-en run1   0.0s
-[ 43/60] ok  demo:simulasi-b                          Q08-en run1   0.0s
+[ 42/60] ok  demo:simulasi-b                          Q08-id run1   0.0s
+[ 43/60] ok  demo:simulasi-b                          Q04-id run1   0.0s
 [ 44/60] ok  demo:simulasi-b                          Q09-id run1   0.0s
-[ 45/60] ok  demo:simulasi-b                          Q09-en run1   0.0s
+[ 45/60] ok  demo:simulasi-b                          Q06-en run1   0.0s
 [ 46/60] ok  demo:simulasi-b                          Q10-id run1   0.0s
-[ 47/60] ok  demo:simulasi-b                          Q05-en run1   0.0s
+[ 47/60] ok  demo:simulasi-b                          Q10-en run1   0.0s
 [ 48/60] ok  demo:simulasi-b                          Q11-id run1   0.0s
 [ 49/60] ok  demo:simulasi-b                          Q11-en run1   0.0s
 [ 50/60] ok  demo:simulasi-b                          Q07-en run1   0.0s
 [ 51/60] ok  demo:simulasi-b                          Q12-en run1   0.0s
-[ 52/60] ok  demo:simulasi-b                          Q08-id run1   0.0s
+[ 52/60] ok  demo:simulasi-b                          Q08-en run1   0.0s
 [ 53/60] ok  demo:simulasi-b                          Q13-en run1   0.0s
-[ 54/60] ok  demo:simulasi-b                          Q14-id run1   0.0s
-[ 55/60] ok  demo:simulasi-b                          Q10-en run1   0.0s
+[ 54/60] ok  demo:simulasi-b                          Q09-en run1   0.0s
+[ 55/60] ok  demo:simulasi-b                          Q14-en run1   0.0s
 [ 56/60] ok  demo:simulasi-b                          Q15-id run1   0.0s
 [ 57/60] ok  demo:simulasi-b                          Q15-en run1   0.0s
-[ 58/60] ok  demo:simulasi-b                          Q14-en run1   0.0s
+[ 58/60] ok  demo:simulasi-b                          Q13-id run1   0.0s
 [ 59/60] ok  demo:simulasi-b                          Q12-id run1   0.0s
-[ 60/60] ok  demo:simulasi-b                          Q13-id run1   0.0s
+[ 60/60] ok  demo:simulasi-b                          Q14-id run1   0.0s
 
 ==============================================================================
  #  Destinasi                  Sebutan    SOV %  Mention %  Urutan
@@ -143,21 +143,21 @@ File hasil di: <work>/demo_out
   - dashboard_data.json
 Arsip: <work>/demo_out.zip
 total 1244
-drwxr-xr-x 2 root root   4096 Oct 27 03:22 .
-drwx------ 5 root root   4096 Oct 27 03:22 ..
--rw-r--r-- 1 root root  61122 Oct 27 03:22 dashboard_data.json
--rw-r--r-- 1 root root 101812 Oct 27 03:22 mention_rate.png
--rw-r--r-- 1 root root  75092 Oct 27 03:22 mentions.csv
--rw-r--r-- 1 root root 590484 Oct 27 03:22 report.html
--rw-r--r-- 1 root root  34057 Oct 27 03:22 responses.csv
--rw-r--r-- 1 root root  50888 Oct 27 03:22 responses.jsonl
--rw-r--r-- 1 root root 114276 Oct 27 03:22 share_of_voice.png
--rw-r--r-- 1 root root   9913 Oct 27 03:22 sov_by_category.csv
--rw-r--r-- 1 root root   1427 Oct 27 03:22 sov_by_language.csv
--rw-r--r-- 1 root root  91564 Oct 27 03:22 sov_by_language.png
--rw-r--r-- 1 root root   1719 Oct 27 03:22 sov_by_model.csv
--rw-r--r-- 1 root root 104598 Oct 27 03:22 sov_by_model.png
--rw-r--r-- 1 root root    711 Oct 27 03:22 summary.csv
+drwxr-xr-x 2 root root   4096 Oct 27 03:23 .
+drwx------ 5 root root   4096 Oct 27 03:23 ..
+-rw-r--r-- 1 root root  61122 Oct 27 03:23 dashboard_data.json
+-rw-r--r-- 1 root root 101812 Oct 27 03:23 mention_rate.png
+-rw-r--r-- 1 root root  75092 Oct 27 03:23 mentions.csv
+-rw-r--r-- 1 root root 590484 Oct 27 03:23 report.html
+-rw-r--r-- 1 root root  34057 Oct 27 03:23 responses.csv
+-rw-r--r-- 1 root root  50888 Oct 27 03:23 responses.jsonl
+-rw-r--r-- 1 root root 114276 Oct 27 03:23 share_of_voice.png
+-rw-r--r-- 1 root root   9913 Oct 27 03:23 sov_by_category.csv
+-rw-r--r-- 1 root root   1427 Oct 27 03:23 sov_by_language.csv
+-rw-r--r-- 1 root root  91564 Oct 27 03:23 sov_by_language.png
+-rw-r--r-- 1 root root   1719 Oct 27 03:23 sov_by_model.csv
+-rw-r--r-- 1 root root 104598 Oct 27 03:23 sov_by_model.png
+-rw-r--r-- 1 root root    711 Oct 27 03:23 summary.csv
 
 ## [3/4] pytest lengkap
 ============================= test session starts ==============================
@@ -229,42 +229,29 @@ tests/test_web_dashboard.py::test_export_csv_neutralizes_formulas PASSED [ 96%]
 tests/test_web_dashboard.py::test_theme_toggle_and_prefs_without_keys PASSED [ 98%]
 tests/test_web_dashboard.py::test_mobile_layout PASSED                   [100%]
 
-======================== 60 passed, 2 skipped in 43.16s ========================
+======================== 60 passed, 2 skipped in 42.30s ========================
 
 ## [3b/4] server Streamlit sungguhan (streamlit run) + screenshot
 health: ok
-Traceback (most recent call last):
-  File "<stdin>", line 10, in <module>
-  File "<work>/venv/lib/python3.13/site-packages/playwright/sync_api/_generated.py", line 11021, in click
-    self._sync(
-    ~~~~~~~~~~^
-        self._impl_obj.click(
-        ^^^^^^^^^^^^^^^^^^^^^
-    ...<11 lines>...
-        )
-        ^
-    )
-    ^
-  File "<work>/venv/lib/python3.13/site-packages/playwright/_impl/_sync_base.py", line 111, in _sync
-    return task.result()
-           ~~~~~~~~~~~^^
-  File "<work>/venv/lib/python3.13/site-packages/playwright/_impl/_locator.py", line 174, in click
-    return await self._frame._click(self._selector, strict=True, **params)
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "<work>/venv/lib/python3.13/site-packages/playwright/_impl/_frame.py", line 598, in _click
-    await self._channel.send("click", self._timeout, locals_to_params(locals()))
-  File "<work>/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 78, in send
-    return await self._connection.wrap_api_call(
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    ...<3 lines>...
-    )
-    ^
-  File "<work>/venv/lib/python3.13/site-packages/playwright/_impl/_connection.py", line 636, in wrap_api_call
-    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
-playwright._impl._errors.Error: Locator.click: Error: strict mode violation: get_by_text("Contoh (demo)") resolved to 2 elements:
-    1) <p>Contoh (demo)</p> aka get_by_test_id("stRadioGroup").get_by_text("Contoh (demo)")
-    2) <strong>3. Contoh (demo)</strong> aka get_by_test_id("stHorizontalBlock").get_by_text("Contoh (demo)")
+Streamlit dirender, metrik: ['SOV Danau Toba', 'Peringkat Danau Toba', 'SOV Bali', 'SOV Labuan Bajo'] exceptions: 0
+scripts/clean_env_test.sh: line 69: kill: (6655) - No such process
 
-Call log:
-  - waiting for get_by_text("Contoh (demo)")
+## [4/4] build .exe PyInstaller (venv terpisah, dependensi inti saja)
+42466 INFO: Building EXE from EXE-00.toc completed successfully.
+42475 INFO: Build complete! The results are available in: <work>/src/dist
+total 58692
+drwxr-xr-x  2 root root     4096 Oct 27 03:25 .
+drwxr-xr-x 11 root root     4096 Oct 27 03:24 ..
+-rwxr-xr-x  1 root root 60089800 Oct 27 03:25 GEM-Visibility-Auditor
+gem_visibility_auditor 1.1.0
+============================= test session starts ==============================
+platform linux -- Python 3.13.17, pytest-9.1.1, pluggy-1.7.0 -- <work>/venv-exe/bin/python
+rootdir: <work>/src
+collecting ... collected 2 items
 
+tests/test_exe.py::test_exe_demo_run PASSED                              [ 50%]
+tests/test_exe.py::test_exe_version_and_questions PASSED                 [100%]
+
+============================== 2 passed in 4.19s ===============================
+
+## SEMUA LANGKAH LULUS
