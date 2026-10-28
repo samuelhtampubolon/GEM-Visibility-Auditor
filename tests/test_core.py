@@ -178,3 +178,17 @@ def test_insights(cfg):
     ins = gva.build_insights(res)
     assert len(ins) >= 6 and ins[0].startswith("Danau Toba berada di peringkat")
     assert any("Setiap 100 sebutan Bali" in t for t in ins)
+
+
+def test_report_csp_uses_style_hash_not_unsafe(cfg, tmp_path):
+    import base64
+    import hashlib
+    recs = gva.run_audit([("demo", "simulasi-a")], cfg, ["id"], max_questions=2, workers=1)
+    df = gva.records_to_df(recs)
+    paths = gva.export_outputs(df, gva.analyze(df, cfg), cfg, tmp_path / "out")
+    html_text = paths["report.html"].read_text(encoding="utf-8")
+    assert "unsafe" not in html_text.split("</head>")[0]
+    css = html_text.split("<style>", 1)[1].split("</style>", 1)[0]
+    digest = base64.b64encode(hashlib.sha256(css.encode("utf-8")).digest()).decode("ascii")
+    assert f"style-src 'sha256-{digest}'" in html_text
+    assert "<script" not in html_text.lower()

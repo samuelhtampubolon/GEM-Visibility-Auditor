@@ -66,7 +66,7 @@ import webbrowser
 import zipfile
 from pathlib import Path
 
-__version__ = "1.1.1"
+__version__ = "1.1.2"
 
 # ---------------------------------------------------------------------------
 # Pengaturan khusus Google Colab / Jupyter (dipakai saat file ditempel ke sel).
@@ -1202,7 +1202,13 @@ def save_charts(results: dict, out_dir: Path, show: bool = False) -> dict:
 # ---------------------------------------------------------------------------
 # Laporan HTML & ekspor
 # ---------------------------------------------------------------------------
+def display_text(text: str) -> str:
+    """Untuk tampilan saja: buang penanda markdown (**tebal**, __, judul #). Penghitungan memakai teks asli."""
+    return re.sub(r"(?m)^#{1,6}\s+", "", re.sub(r"\*\*|__", "", text or ""))
+
+
 def _highlight_html(text: str, matchers: list, cfg: dict) -> str:
+    text = display_text(text)
     norm = normalize_text(text)
     out, pos = [], 0
     for s, e, d in find_spans(text, matchers):
@@ -1212,6 +1218,41 @@ def _highlight_html(text: str, matchers: list, cfg: dict) -> str:
         pos = e
     out.append(html.escape(norm[pos:]))
     return "".join(out)
+
+
+# CSS laporan sebagai konstanta: CSP hanya mengizinkan blok ini lewat hash SHA-256-nya.
+REPORT_CSS = """
+:root{--bg:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#e1e0d9;
+--focus:#2a78d6;--competitor:#eb6834;--other:#c3c2b7;--warn-bg:#fff4dc}
+@media (prefers-color-scheme:dark){:root{--bg:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;
+--line:#2c2c2a;--focus:#3987e5;--competitor:#d95926;--other:#5f5e5a;--warn-bg:#3a2e12}
+figure img{filter:brightness(.92)}}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:1080px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:26px;margin:0 0 4px} h2{font-size:18px;margin:32px 0 12px}
+.meta{color:var(--ink2);font-size:13px}
+.banner{background:var(--warn-bg);border:1px solid var(--line);padding:10px 14px;border-radius:8px;margin:16px 0}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+.tile .lbl{color:var(--ink2);font-size:13px} .tile .val{font-size:30px;font-weight:600}
+.tile.hero .val{font-size:48px} .tile .sub{color:var(--ink2);font-size:12.5px}
+figure{margin:16px 0;background:#fcfcfb;border:1px solid var(--line);border-radius:10px;padding:8px;overflow:auto}
+figure img{max-width:100%;height:auto;display:block;margin:auto}
+table{border-collapse:collapse;width:100%;background:var(--surface);font-size:14px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)} th{color:var(--ink2);font-weight:600}
+td:nth-child(n+3){font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;background:var(--other)}
+.sw.focus{background:var(--focus)} .sw.competitor{background:var(--competitor)}
+tr.focus td{font-weight:600}
+.insights{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 34px;margin:0}
+.insights li{margin:4px 0}
+.tablewrap{overflow-x:auto}
+details{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:8px 12px}
+summary{cursor:pointer;font-size:13.5px} pre{white-space:pre-wrap;font:13px/1.5 ui-monospace,Consolas,monospace}
+mark{background:#e1e0d9;color:inherit;border-radius:3px;padding:0 2px}
+mark.focus{background:#cde2fb;color:#0b0b0b} mark.competitor{background:#fbd9c9;color:#0b0b0b}
+"""
+REPORT_CSS_HASH = "'sha256-" + base64.b64encode(hashlib.sha256(REPORT_CSS.encode("utf-8")).digest()).decode("ascii") + "'"
 
 
 def build_report_html(results: dict, df, cfg: dict, chart_paths: dict) -> str:
@@ -1253,40 +1294,10 @@ def build_report_html(results: dict, df, cfg: dict, chart_paths: dict) -> str:
     generated = _dt.datetime.now().strftime("%Y-%m-%d %H:%M")
     return f"""<!doctype html>
 <html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src {REPORT_CSS_HASH}; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>GEM Visibility Audit</title>
-<style>
-:root{{--bg:#f9f9f7;--surface:#fcfcfb;--ink:#0b0b0b;--ink2:#52514e;--muted:#898781;--line:#e1e0d9;
---focus:#2a78d6;--competitor:#eb6834;--other:#c3c2b7;--warn-bg:#fff4dc}}
-@media (prefers-color-scheme:dark){{:root{{--bg:#0d0d0d;--surface:#1a1a19;--ink:#f0efec;--ink2:#c3c2b7;
---line:#2c2c2a;--focus:#3987e5;--competitor:#d95926;--other:#5f5e5a;--warn-bg:#3a2e12}}
-figure img{{filter:brightness(.92)}}}}
-body{{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}}
-main{{max-width:1080px;margin:0 auto;padding:24px 16px 64px}}
-h1{{font-size:26px;margin:0 0 4px}} h2{{font-size:18px;margin:32px 0 12px}}
-.meta{{color:var(--ink2);font-size:13px}}
-.banner{{background:var(--warn-bg);border:1px solid var(--line);padding:10px 14px;border-radius:8px;margin:16px 0}}
-.tiles{{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:16px}}
-.tile{{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}}
-.tile .lbl{{color:var(--ink2);font-size:13px}} .tile .val{{font-size:30px;font-weight:600}}
-.tile.hero .val{{font-size:48px}} .tile .sub{{color:var(--ink2);font-size:12.5px}}
-figure{{margin:16px 0;background:#fcfcfb;border:1px solid var(--line);border-radius:10px;padding:8px;overflow:auto}}
-figure img{{max-width:100%;height:auto;display:block;margin:auto}}
-table{{border-collapse:collapse;width:100%;background:var(--surface);font-size:14px}}
-th,td{{text-align:left;padding:7px 10px;border-bottom:1px solid var(--line)}} th{{color:var(--ink2);font-weight:600}}
-td:nth-child(n+3){{font-variant-numeric:tabular-nums}}
-.sw{{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:8px;background:var(--other)}}
-.sw.focus{{background:var(--focus)}} .sw.competitor{{background:var(--competitor)}}
-tr.focus td{{font-weight:600}}
-.insights{{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 16px 12px 34px;margin:0}}
-.insights li{{margin:4px 0}}
-.tablewrap{{overflow-x:auto}}
-details{{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:8px 0;padding:8px 12px}}
-summary{{cursor:pointer;font-size:13.5px}} pre{{white-space:pre-wrap;font:13px/1.5 ui-monospace,Consolas,monospace}}
-mark{{background:#e1e0d9;color:inherit;border-radius:3px;padding:0 2px}}
-mark.focus{{background:#cde2fb;color:#0b0b0b}} mark.competitor{{background:#fbd9c9;color:#0b0b0b}}
-</style></head><body><main>
+<style>{REPORT_CSS}</style></head><body><main>
 <h1>GEM Visibility Audit: share of AI voice</h1>
 <div class="meta">Dibuat {generated} | GEM Visibility Auditor v{__version__} | {h['responses_ok']} jawaban berhasil,
 {h['responses_error']} gagal | Model: {html.escape(', '.join(h['models']))}</div>
