@@ -1,0 +1,64 @@
+name: Bersihkan run dan artifact lama (sekali jalan)
+
+# Workflow sementara: menghapus run GitHub Actions (beserta log dan artifact-nya) yang berasal dari
+# riwayat git lama, termasuk artifact .exe v1.0.0 yang masih berisi opsi --key. Run dari commit yang
+# ada di riwayat main tidak disentuh. Hanya manual dari branch default dengan konfirmasi "HAPUS".
+# File ini dihapus lagi setelah dijalankan.
+
+on:
+  workflow_dispatch:
+    inputs:
+      konfirmasi:
+        description: "Ketik HAPUS untuk menghapus run, log, dan artifact dari riwayat git lama"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  cleanup:
+    if: github.ref_name == github.event.repository.default_branch && inputs.konfirmasi == 'HAPUS'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      ROOT_COMMIT: 082c1e23ba369ad8d68966131dc158a1f301a94f
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Pastikan riwayat main lengkap (pengaman)
+        run: |
+          set -euo pipefail
+          git cat-file -e "${ROOT_COMMIT}^{commit}"
+          test "$(git rev-list --max-parents=0 HEAD)" = "$ROOT_COMMIT"
+          echo "riwayat main lengkap: $(git rev-list --count HEAD) commit"
+      - name: Hapus run dari riwayat lama
+        run: |
+          set -euo pipefail
+          gh api --paginate "repos/$GH_REPO/actions/runs?per_page=100" \
+            --jq '.workflow_runs[] | "\(.id) \(.head_sha) \(.status)"' > runs.txt
+          deleted=0
+          kept=0
+          while read -r id sha status; do
+            if git merge-base --is-ancestor "$sha" HEAD 2> /dev/null; then
+              kept=$((kept + 1))
+              continue
+            fi
+            if [ "$status" != "completed" ]; then
+              echo "lewati run $id (status $status)"
+              continue
+            fi
+            gh api -X DELETE "repos/$GH_REPO/actions/runs/$id" > /dev/null
+            deleted=$((deleted + 1))
+          done < runs.txt
+          echo "dihapus: $deleted run dari riwayat lama; disimpan: $kept run dari riwayat main"
+      - name: Sisa artifact
+        run: |
+          gh api "repos/$GH_REPO/actions/artifacts?per_page=100" \
+            --jq '.artifacts[] | "\(.name) \(.workflow_run.head_sha[0:7]) expired=\(.expired)"'

@@ -288,13 +288,13 @@ with tabs[4]:
         view = view[mask]
     matchers = gva.build_matchers(view_cfg["destinations"])
     st.caption(f"{len(view)} jawaban (maks. 50 ditampilkan). Sorotan biru = fokus, oranye = pembanding.")
-    st.markdown(HIGHLIGHT_CSS, unsafe_allow_html=True)  # konstanta CSS, tanpa data pengguna
     for r in view.head(50).to_dict("records"):
         with st.expander(f"{r['model_label']} | {r['question_id']}-{r['language']} | {r['prompt']}"):
             if r["status"] != "ok":
                 st.error(r["error"])
             else:
-                st.markdown(answer_html(r["response"], matchers, view_cfg), unsafe_allow_html=True)
+                # st.html menyanitasi HTML (DOMPurify) dan mengabaikan JavaScript; teks juga sudah di-escape.
+                st.html(HIGHLIGHT_CSS + answer_html(r["response"], matchers, view_cfg))
 with tabs[5]:
     st.caption("CSV aman dibuka di Excel/Sheets (sel yang diawali formula dinetralkan).")
     c1, c2, c3 = st.columns(3)

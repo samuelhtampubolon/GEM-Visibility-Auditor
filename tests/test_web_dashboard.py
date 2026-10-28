@@ -320,3 +320,20 @@ def test_mobile_layout_with_wide_font(browser, site, width):
     pg.wait_for_timeout(200)
     assert pg.evaluate("document.documentElement.scrollWidth") <= width
     ctx.close()
+
+
+def test_report_html_styles_apply_under_csp(browser, tmp_path):
+    """report.html: gaya tetap berlaku di bawah CSP berbasis hash, tanpa pelanggaran CSP."""
+    cfg = gva.load_config()
+    recs = gva.run_audit([("demo", "simulasi-a")], cfg, ["id"], max_questions=2, workers=1)
+    df = gva.records_to_df(recs)
+    report = gva.export_outputs(df, gva.analyze(df, cfg), cfg, tmp_path / "out")["report.html"]
+    ctx = browser.new_context()
+    pg = ctx.new_page()
+    errors = []
+    pg.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
+    pg.goto(report.resolve().as_uri())
+    assert pg.evaluate("getComputedStyle(document.querySelector('h1')).fontSize") == "26px"
+    assert pg.evaluate("getComputedStyle(document.querySelector('main')).maxWidth") == "1080px"
+    assert not [e for e in errors if "Content Security Policy" in e], errors
+    ctx.close()
