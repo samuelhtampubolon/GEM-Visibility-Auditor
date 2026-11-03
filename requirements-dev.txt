@@ -3,5 +3,5 @@ pytest>=8
 nbformat>=5.9
 nbclient>=0.10
 ipykernel>=6.29
-playwright>=1.45
+playwright>=1.64.1
 pyinstaller>=6.6
